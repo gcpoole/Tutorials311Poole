@@ -57,6 +57,9 @@ Use the data frame you. just created and the sand box below to:
 - Make a box plot with island on the x axis and body mass on the y axis.
  
 ```{r filter_mean_plot-setup}
+#```{r palmer-p-setup}
+# If you name this "filter_mean-setup" it will automatically be the setup for 
+# filter-mean chunk
 palmer_p <- palmerpenguins::penguins
 large_penguins <- palmer_p %>% select(species, island, body_mass_g, 
     sex) %>% drop_na() %>% filter(body_mass_g > mean(body_mass_g))
@@ -121,6 +124,9 @@ lets make a new data frame.  In the sand box below:
 - Name your data frame b_f
 
 ```{r final_plot_df-setup}
+#```{r palmer-p-setup}
+# If you name this "filter_mean-setup" it will automatically be the setup for 
+# filter-mean chunk
 palmer_p <- palmerpenguins::penguins
 large_penguins <- palmer_p %>% select(species, island, body_mass_g, 
     sex) %>% drop_na() %>% filter(body_mass_g > mean(body_mass_g))

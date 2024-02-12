@@ -205,7 +205,7 @@ Now you try:
 seq(by = 2, 0, 10)
 ```
 
-### More little more about `seq()`
+### More about `seq()`
 
 `seq()` can create a sequence of a fixed length between any two numbers.  But to do this, you have to skip the `by` parameter (not pass any value to `by`), but instead, pass the length of the desired sequence to a different parameter.
 
@@ -310,7 +310,7 @@ Try running the following code.  You will get an error.  Then:
 - Fix the code so that it returns the 13th, 19th, and 21st letter of the alphabet. 
 
 ```{r index_MSU, exercise = tutorialize}
-#+ LETTERS[13, 19, 21]
+#+ LETTERS[13, 29, 21]
 LETTERS[c(13, 19, 21)]
 ```
 
@@ -416,7 +416,7 @@ You might immediately notice that R displays *named* vectors a little differentl
 In the sandbox below:
 
 - Make a vector of values from 1 to 26 and assign it to the name `letter_order`.
-- Display `letter order`
+- Display `letter_order`
 - Use the `names()` function with the assignment operator to set the value names in  `letter_order` equal to the `letters` vector.
 - Display `letter_order` again.
 

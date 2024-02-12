@@ -9,7 +9,6 @@ runtime: shiny_prerendered
 description: "An introduction to data.frames -- indexing (subsetting) tabular data in base R."
 
 ---
-<!-- File created by tutorialize.  Do not edit by hand. -->
 
 ```{r setup, include=FALSE}
 library(learnr)
@@ -47,9 +46,9 @@ area_of_circle(6.3)
 
 We've also worked with `atomic vectors`, which are ordered collections of values and we've come to understand that there is a sub-type of `atomic vectors` for each different types of data.  So far we've learned about `numeric`, `Date`, `character`, and `logical` data types.  We've also found that `numeric` atomic vectors are one of two flavors: `integer` or `double`.  (A `double` contains real numbers -- those with a decimal point like 3.256)
 
+<!-- We can sum up this "object hierarchy" in the image below, where an arrow can be read as "is a type of".  So for instance, when you look at the diagram, you can see that ``atomic` is a type of `vector` and `vector` is a type of `object`.  By extension, then, an `atomic` vector is a type of object.
 
-
-
+![](data/RObjectHierarchyAtomicVectors.png){#id .class width=10% height=10%} -->
 
 We refer to these relationships as "inheritance."  We say "`numeric` inherits from `atomic`".  By this be mean that `numeric`s have all of the properties of `atomic`s, plus a few more.  More importantly, if you can do a particular operation on an object type, you can do that same operation on any object that inherits from that type.  
 
@@ -80,33 +79,18 @@ Don't forget to display the list!
 my_list <- list(letters, 1:10, sum)
 ```
 
-```{r make_a_list, exercise=TRUE}
-my_list <- list(___, ___, ___)
-```
-
-```{r make_a_list-solution}
+```{r make_a_list, exercise=tutorialize}
+#+ my_list <- list(___, ___, ___)
 my_list <- list(letters, 1:10, sum)
 my_list
-```
-
-```{r make_a_list-code-check}
-grade_code()
 ```
 
 The last item in the list might look a little strange.  But in the sandbox below: 
 
 - display the `sum` function and see if it doesn't look like the last item in `my_list`!
 
-```{r display_sum, exercise=TRUE}
-
-```
-
-```{r display_sum-solution}
+```{r display_sum, exercise=tutorialize}
 sum
-```
-
-```{r display_sum-code-check}
-grade_code()
 ```
 
 ### Indexing lists by position
@@ -138,20 +122,8 @@ So earlier in the tutorial we created `my_list`.
 
 - Remind yourself what is in `my_list` by displaying it
 
-```{r display_my_list-setup}
-my_list <- list(letters, 1:10, sum)
-```
-
-```{r display_my_list, exercise=TRUE}
-
-```
-
-```{r display_my_list-solution}
+```{r display_my_list, exercise=tutorialize, exercise.setup=make_a_list}
 my_list
-```
-
-```{r display_my_list-code-check}
-grade_code()
 ```
 
 OK.  Now, using your knowlege of indexing `atomic` vectors:
@@ -160,22 +132,10 @@ OK.  Now, using your knowlege of indexing `atomic` vectors:
 - display `my_short_list`
 - prove to yourself that `my_short_list` is a list (hint: try `?is.list` in the console).
 
-```{r shorten_my_list-setup}
-my_list <- list(letters, 1:10, sum)
-```
-
-```{r shorten_my_list, exercise=TRUE}
-
-```
-
-```{r shorten_my_list-solution}
+```{r shorten_my_list, exercise=tutorialize, exercise.setup=make_a_list}
 my_short_list <- my_list[c(1,3)]
 my_short_list
 is.list(my_short_list)
-```
-
-```{r shorten_my_list-code-check}
-grade_code()
 ```
 
 ### A list of length 1
@@ -186,22 +146,10 @@ Try the following:
 - display `length_1_list`
 - prove to yourself that `length_1_list` is a list.
 
-```{r length_1_list-setup}
-my_list <- list(letters, 1:10, sum)
-```
-
-```{r length_1_list, exercise=TRUE}
-
-```
-
-```{r length_1_list-solution}
+```{r length_1_list, exercise=tutorialize, exercise.setup=make_a_list}
 length_1_list <- my_list[2]
 length_1_list
 is.list(length_1_list)
-```
-
-```{r length_1_list-code-check}
-grade_code()
 ```
 
 In the sandbox below:
@@ -259,26 +207,15 @@ Extraction, on the other hand, retrieves the *contents* of one cubbyhole!  In th
 - Have R display the length of `my_integer_vector`.
 - Sum the values in `my_integer_vector`
 
-```{r extract_integer_vector-setup}
-my_list <- list(letters, 1:10, sum)
-```
-
-```{r extract_integer_vector, exercise=TRUE}
-# Note the double brackets...
-my_integer_vector <- my_list[[2]]
-```
-
-```{r extract_integer_vector-solution}
+```{r extract_integer_vector, exercise=tutorialize, exercise.setup=make_a_list}
+#+ # Note the double brackets...
+#+ my_integer_vector <- my_list[[2]]
 # Note the double brackets...
 my_integer_vector <- my_list[[2]]
 is.list(my_integer_vector)
 is.vector(my_integer_vector)
 length(my_integer_vector)
 sum(my_integer_vector)
-```
-
-```{r extract_integer_vector-code-check}
-grade_code()
 ```
 
 The `identical()` function tells you if two objects are identical.  Consider the following:
@@ -295,20 +232,9 @@ Remember, the extraction operator `[[` will pull the `integer` vector out of the
 
 - modify `my_list[2]` in the sample line of code slightly so that `identical` returns `TRUE`
 
-```{r try_extraction-setup}
-my_list <- list(letters, 1:10, sum)
-```
-
-```{r try_extraction, exercise=TRUE}
-identical(1:10, my_list[2])
-```
-
-```{r try_extraction-solution}
+```{r try_extraction, exercise=tutorialize, exercise.setup=make_a_list}
+#+ identical(1:10, my_list[2])
 identical(1:10, my_list[[2]])
-```
-
-```{r try_extraction-code-check}
-grade_code()
 ```
 
 ### Naming the objects in a `list`
@@ -323,21 +249,9 @@ Just like each value in an `atomic` vector can be assigned a name, the items in 
 names(my_list) <- c("letters", "integers", "sum_function")
 ```
 
-```{r name_my_list-setup}
-my_list <- list(letters, 1:10, sum)
-```
-
-```{r name_my_list, exercise=TRUE}
-
-```
-
-```{r name_my_list-solution}
+```{r name_my_list, exercise=tutorialize, exercise.setup=make_a_list}
 names(my_list) <- c("letters", "integers", "sum_function")
 my_list
-```
-
-```{r name_my_list-code-check}
-grade_code()
 ```
 
 Notice the "[[#]]" preceding each list item is gone; now the name is displayed preceded by a `$` when R displays each item in a named `list`.
@@ -358,16 +272,9 @@ In the sandbox below:
 
 - change the code so that the names "letters", "integers", and "sum_function" are included in `my_list` at the time the `list` is created.
 
-```{r name_when_creating_list, exercise=TRUE}
-my_list <- list(letters, 1:10, sum)
-```
-
-```{r name_when_creating_list-solution}
+```{r name_when_creating_list, exercise=tutorialize}
+#+ my_list <- list(letters, 1:10, sum)
 my_list <- list(letters = letters, integers = 1:10, sum_function = sum)
-```
-
-```{r name_when_creating_list-code-check}
-grade_code()
 ```
 
 In the sandbox below:
@@ -376,23 +283,10 @@ In the sandbox below:
 - then *index* the `integer` vector from `my_list`, again using a name rather than a position (the result should be a `list` of length = 1 containing `1:10`)
 - then see if you can *extract* the `integer` vector from `my_list` using names rather than position.  The result should be an `integer` vector of length = 10.
 
-```{r index_extract_by_name-setup}
-my_list <- list(letters, 1:10, sum)
-names(my_list) <- c("letters", "integers", "sum_function")
-```
-
-```{r index_extract_by_name, exercise=TRUE}
-
-```
-
-```{r index_extract_by_name-solution}
+```{r index_extract_by_name, exercise=tutorialize, exercise.setup=name_my_list}
 my_list[c("letters", "sum_function")]
 my_list["integers"]
 my_list[["integers"]]
-```
-
-```{r index_extract_by_name-code-check}
-grade_code()
 ```
 
 ### Using the `$` operator
@@ -413,21 +307,8 @@ In the sandbox below:
 
 - extract the "integers" vector from `my_list` using first the `$` operator and then again using the `[[` operator; show the results are identical
 
-```{r dollar_vs_double_square-setup}
-my_list <- list(letters, 1:10, sum)
-names(my_list) <- c("letters", "integers", "sum_function")
-```
-
-```{r dollar_vs_double_square, exercise=TRUE}
-
-```
-
-```{r dollar_vs_double_square-solution}
+```{r dollar_vs_double_square, exercise=tutorialize, exercise.setup=name_my_list}
 identical(my_list$integers, my_list[["integers"]])
-```
-
-```{r dollar_vs_double_square-code-check}
-grade_code()
 ```
 
 Now consider the following code:
@@ -490,16 +371,8 @@ The `str()` function provides a useful summary of the structure of a data.frame.
 
 - pass `mtcars` to the `str()` function
 
-```{r str_mtcars, exercise=TRUE}
-
-```
-
-```{r str_mtcars-solution}
+```{r str_mtcars, exercise=tutorialize}
 str(mtcars)
-```
-
-```{r str_mtcars-code-check}
-grade_code()
 ```
 
 The `head()` function shows the first few values of any item.  In the sandbox below:
@@ -507,17 +380,9 @@ The `head()` function shows the first few values of any item.  In the sandbox be
 - pass `letters` to the `head()` function;
 - pass `mtcars` to the `head()` function.
 
-```{r head_letters_mtcars, exercise=TRUE}
-
-```
-
-```{r head_letters_mtcars-solution}
+```{r head_letters_mtcars, exercise=tutorialize}
 head(letters)
 head(mtcars)
-```
-
-```{r head_letters_mtcars-code-check}
-grade_code()
 ```
 
 Read the help on the head function.  Now, in the sandbox below:
@@ -525,17 +390,9 @@ Read the help on the head function.  Now, in the sandbox below:
 - use `head()` to display the first 10 letters of the alphabet;
 - use `head()` to display the forst 10 rows of `mtcars`.
 
-```{r head_letters_mtcars_10, exercise=TRUE}
-
-```
-
-```{r head_letters_mtcars_10-solution}
+```{r head_letters_mtcars_10, exercise=tutorialize}
 head(letters, 10)
 head(mtcars, 10)
-```
-
-```{r head_letters_mtcars_10-code-check}
-grade_code()
 ```
 
 `nrow()` and `ncol()` are two useful functions `data.frames`.  Check out the help on these function.  Then, in the sandbox below:
@@ -543,17 +400,9 @@ grade_code()
 - display the number of rows in `mtcars`
 - display the number columns
 
-```{r nrow_ncol, exercise=TRUE}
-
-```
-
-```{r nrow_ncol-solution}
+```{r nrow_ncol, exercise=tutorialize}
 nrow(mtcars)
 ncol(mtcars)
-```
-
-```{r nrow_ncol-code-check}
-grade_code()
 ```
 
 ## `data.frame`s are `list`s
@@ -574,16 +423,8 @@ In the sandbox below:
 
 - Prove that `mtcars` is a `list`
 
-```{r df_is_list, exercise=TRUE}
-
-```
-
-```{r df_is_list-solution}
+```{r df_is_list, exercise=tutorialize}
 is.list(mtcars)
-```
-
-```{r df_is_list-code-check}
-grade_code()
 ```
 
 So, if a `data.frame` is a `list` of `vectors` that each represent columns, then what would the names of the `vectors` in the `list` represent? Try it out:
@@ -591,17 +432,9 @@ So, if a `data.frame` is a `list` of `vectors` that each represent columns, then
 - Use `names()` to get the names of the items in `mtcars`
 - Then use `str()` to view the structure of `mtcars` again.
 
-```{r names_of_mtcars, exercise=TRUE}
-
-```
-
-```{r names_of_mtcars-solution}
+```{r names_of_mtcars, exercise=tutorialize}
 names(mtcars)
 str(mtcars)
-```
-
-```{r names_of_mtcars-code-check}
-grade_code()
 ```
 
 Sure! The names in the `list` must be the column names!  And so they are!
@@ -611,17 +444,9 @@ How about the length of the `list`?
 - Display the length of `mtcars` using `length()`
 - Display the number of columns useing `ncol()`
 
-```{r length_vs_ncol, exercise=TRUE}
-
-```
-
-```{r length_vs_ncol-solution}
+```{r length_vs_ncol, exercise=tutorialize}
 length(mtcars)
 ncol(mtcars)
-```
-
-```{r length_vs_ncol-code-check}
-grade_code()
 ```
 
 Makes sense, right?
@@ -637,21 +462,13 @@ If `mtcars` is a list of columns, then you should be able to extract columns.  T
 - display `col_6`
 - show that `col_6` is a vector
 
-```{r extract_columns, exercise=TRUE}
-
-```
-
-```{r extract_columns-solution}
+```{r extract_columns, exercise=tutorialize}
 mpg_col <- mtcars$mpg
 mpg_col
 is.vector(mpg_col)
 col_6 <- mtcars[[6]]
 col_6
 is.vector(col_6)
-```
-
-```{r extract_columns-code-check}
-grade_code()
 ```
 
 Remember, `mpg_col` contains a *copy* of the data in the `mpg` column from `mtcars`.  If you modify `mpg_col`, it doesn't affect `mtcars`.
@@ -662,23 +479,10 @@ How long are the column vectors?
 - display the length of the `col_6` vector
 - display the number of rows in `mtcars`
 
-```{r col_length_vs_nrows-setup}
-mpg_col <- mtcars$mpg
-col_6 <- mtcars[[6]]
-```
-
-```{r col_length_vs_nrows, exercise=TRUE}
-
-```
-
-```{r col_length_vs_nrows-solution}
+```{r col_length_vs_nrows, exercise=tutorialize, exercise.setup=extract_columns}
 length(mpg_col)
 length(col_6)
 nrow(mtcars)
-```
-
-```{r col_length_vs_nrows-code-check}
-grade_code()
 ```
 
 Make sense?
@@ -693,18 +497,10 @@ Try these:
 - display the range in fuel economy for the cars in `mtcars` (hint: `?range`)
 - display a vector different number of cylinders that the cars might have (hint: `?unique`) 
 
-```{r mean_disp, exercise=TRUE}
-
-```
-
-```{r mean_disp-solution}
+```{r mean_disp, exercise=tutorialize}
 mean(mtcars$disp)
 range(mtcars$mpg)
 unique(mtcars$cyl)
-```
-
-```{r mean_disp-code-check}
-grade_code()
 ```
 
 ## Indexing `data.frame`s
@@ -714,17 +510,9 @@ grade_code()
 - use `[` to subset mtcars.  Include columns 1, 4, and 6.  Assign the result to `three_column_mtcars`.
 - display the first four rows of `three_column_mtcars`
 
-```{r index_mtcars_as_list_1, exercise=TRUE}
-
-```
-
-```{r index_mtcars_as_list_1-solution}
+```{r index_mtcars_as_list_1, exercise=tutorialize}
 three_column_mtcars <- mtcars[c(1,4,6)]
 head(three_column_mtcars, 4)
-```
-
-```{r index_mtcars_as_list_1-code-check}
-grade_code()
 ```
 
 Try again:
@@ -733,17 +521,9 @@ Try again:
 - display the first five rows of `three_column_mtcars`
 
 
-```{r index_mtcars_as_list_2, exercise=TRUE}
-
-```
-
-```{r index_mtcars_as_list_2-solution}
+```{r index_mtcars_as_list_2, exercise=tutorialize}
 three_column_mtcars <- mtcars[c("mpg", "hp", "wt")]
 head(three_column_mtcars, 4)
-```
-
-```{r index_mtcars_as_list_2-code-check}
-grade_code()
 ```
 
 One more time:
@@ -752,18 +532,10 @@ One more time:
 - display the three five rows of `three_column_mtcars`
 
 
-```{r index_mtcars_as_list_3, exercise=TRUE}
-
-```
-
-```{r index_mtcars_as_list_3-solution}
+```{r index_mtcars_as_list_3, exercise=tutorialize}
 three_column_mtcars <- 
   mtcars[c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE)]
 head(three_column_mtcars, 3)
-```
-
-```{r index_mtcars_as_list_3-code-check}
-grade_code()
 ```
 
 However, `data.frame`s have two dimensions, represented by rows and columns.  They can also be indexed in two dimension by putting TWO indexing vectors inside `[ ]` -- the first index subsets the rows and the second subsets the columns.  
@@ -783,17 +555,9 @@ Now you try!
 - create a logical vector called `has_poor_fuel_economy` that contains TRUE if a car's fuel economy is less than 15 miles per gallon
 - index the `mtcars` data.frame so the result contains the fuel economy, number of cylinders, horsepower, weight, and number of forward gears for cars with poor fuel economy.
 
-```{r index_mtcars_2D_1, exercise=TRUE}
-
-```
-
-```{r index_mtcars_2D_1-solution}
+```{r index_mtcars_2D_1, exercise=tutorialize}
 has_poor_fuel_economy <- mtcars$mpg < 15
 mtcars[has_poor_fuel_economy, c("mpg", "cyl", "hp", "wt", "gear")]
-```
-
-```{r index_mtcars_2D_1-code-check}
-grade_code()
 ```
 
 If you want to include *all* of the columns but still filter the rows, you can leave out the index for the rows, but *be sure to include the comma* to R knows to use two dimensional indexing!  For instance:
@@ -806,20 +570,8 @@ You try:
 
 - display all of the columns for cars that have poor fuel economy. 
 
-```{r index_mtcars_2D_2-setup}
-has_poor_fuel_economy <- mtcars$mpg < 15
-```
-
-```{r index_mtcars_2D_2, exercise=TRUE}
-
-```
-
-```{r index_mtcars_2D_2-solution}
+```{r index_mtcars_2D_2, exercise=tutorialize, exercise.setup=index_mtcars_2D_1}
 mtcars[has_poor_fuel_economy, ]
-```
-
-```{r index_mtcars_2D_2-code-check}
-grade_code()
 ```
 
 You can also leave out the row index to include all the rows, although this is the same as indexing with a single vector:

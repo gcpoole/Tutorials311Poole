@@ -259,7 +259,7 @@ seq(by = 2, 0, 10)
 grade_code()
 ```
 
-### More little more about `seq()`
+### More about `seq()`
 
 `seq()` can create a sequence of a fixed length between any two numbers.  But to do this, you have to skip the `by` parameter (not pass any value to `by`), but instead, pass the length of the desired sequence to a different parameter.
 
@@ -420,7 +420,7 @@ Try running the following code.  You will get an error.  Then:
 - Fix the code so that it returns the 13th, 19th, and 21st letter of the alphabet. 
 
 ```{r index_MSU, exercise=TRUE}
-LETTERS[13, 19, 21]
+LETTERS[13, 29, 21]
 ```
 
 ```{r index_MSU-solution}
@@ -556,7 +556,7 @@ You might immediately notice that R displays *named* vectors a little differentl
 In the sandbox below:
 
 - Make a vector of values from 1 to 26 and assign it to the name `letter_order`.
-- Display `letter order`
+- Display `letter_order`
 - Use the `names()` function with the assignment operator to set the value names in  `letter_order` equal to the `letters` vector.
 - Display `letter_order` again.
 
@@ -714,15 +714,16 @@ The `class()` funciton shows us the class of a vector (or other R object). In th
 
 ```{r more_student_grades_class-setup}
 dummy <- set.seed(330330)
-more_student_grades <- structure(runif(50) * 30 + 70, names = c("Jaylan", 
-    "Luke", "Haiden", "Rowan", "Tessa", "Kash", "Valentin", "Lailah", 
-    "Amare", "Frankie", "Jude", "Maci", "Abigail", "Sawyer", 
-    "Lexi", "Reyna", "Elizabeth", "Rylee", "Leroy", "Camren", 
-    "Jordyn", "Kaleigh", "Shyann", "Heaven", "Holden", "Alaina", 
-    "Barbara", "Miles", "Isaias", "Carsen", "Tristian", "Chaz", 
-    "Chaim", "Felix", "Leilani", "Kyan", "Ashlyn", "Skylar", 
-    "Judah", "Meredith", "Deangelo", "Dania", "Abdullah", "Aron", 
-    "Julianna", "Todd", "Carolyn", "Desmond", "Gabriela", "Lillianna"))
+more_student_grades <- 
+  structure(
+    runif(50) * 30 + 70,
+    names = c("Jaylan", "Luke", "Haiden", "Rowan", "Tessa", "Kash", "Valentin", "Lailah", "Amare", 
+              "Frankie", "Jude", "Maci", "Abigail", "Sawyer", "Lexi", "Reyna", "Elizabeth", "Rylee", "Leroy", 
+              "Camren", "Jordyn", "Kaleigh", "Shyann", "Heaven", "Holden", "Alaina", "Barbara", "Miles", "Isaias", 
+              "Carsen", "Tristian", "Chaz", "Chaim", "Felix", "Leilani", "Kyan", "Ashlyn", "Skylar", "Judah", 
+              "Meredith", "Deangelo", "Dania", "Abdullah", "Aron", "Julianna", "Todd", "Carolyn", "Desmond",
+              "Gabriela", "Lillianna"
+    ))
 more_student_names <- names(more_student_grades)
 ```
 
@@ -744,15 +745,16 @@ Now try with `more_student_names`
 
 ```{r more_student_names_class-setup}
 dummy <- set.seed(330330)
-more_student_grades <- structure(runif(50) * 30 + 70, names = c("Jaylan", 
-    "Luke", "Haiden", "Rowan", "Tessa", "Kash", "Valentin", "Lailah", 
-    "Amare", "Frankie", "Jude", "Maci", "Abigail", "Sawyer", 
-    "Lexi", "Reyna", "Elizabeth", "Rylee", "Leroy", "Camren", 
-    "Jordyn", "Kaleigh", "Shyann", "Heaven", "Holden", "Alaina", 
-    "Barbara", "Miles", "Isaias", "Carsen", "Tristian", "Chaz", 
-    "Chaim", "Felix", "Leilani", "Kyan", "Ashlyn", "Skylar", 
-    "Judah", "Meredith", "Deangelo", "Dania", "Abdullah", "Aron", 
-    "Julianna", "Todd", "Carolyn", "Desmond", "Gabriela", "Lillianna"))
+more_student_grades <- 
+  structure(
+    runif(50) * 30 + 70,
+    names = c("Jaylan", "Luke", "Haiden", "Rowan", "Tessa", "Kash", "Valentin", "Lailah", "Amare", 
+              "Frankie", "Jude", "Maci", "Abigail", "Sawyer", "Lexi", "Reyna", "Elizabeth", "Rylee", "Leroy", 
+              "Camren", "Jordyn", "Kaleigh", "Shyann", "Heaven", "Holden", "Alaina", "Barbara", "Miles", "Isaias", 
+              "Carsen", "Tristian", "Chaz", "Chaim", "Felix", "Leilani", "Kyan", "Ashlyn", "Skylar", "Judah", 
+              "Meredith", "Deangelo", "Dania", "Abdullah", "Aron", "Julianna", "Todd", "Carolyn", "Desmond",
+              "Gabriela", "Lillianna"
+    ))
 more_student_names <- names(more_student_grades)
 ```
 
@@ -799,15 +801,16 @@ You can use `<`, `>`, `<=`, and `>=` to compare character strings by alphabetica
 
 ```{r names_before_e-setup}
 dummy <- set.seed(330330)
-more_student_grades <- structure(runif(50) * 30 + 70, names = c("Jaylan", 
-    "Luke", "Haiden", "Rowan", "Tessa", "Kash", "Valentin", "Lailah", 
-    "Amare", "Frankie", "Jude", "Maci", "Abigail", "Sawyer", 
-    "Lexi", "Reyna", "Elizabeth", "Rylee", "Leroy", "Camren", 
-    "Jordyn", "Kaleigh", "Shyann", "Heaven", "Holden", "Alaina", 
-    "Barbara", "Miles", "Isaias", "Carsen", "Tristian", "Chaz", 
-    "Chaim", "Felix", "Leilani", "Kyan", "Ashlyn", "Skylar", 
-    "Judah", "Meredith", "Deangelo", "Dania", "Abdullah", "Aron", 
-    "Julianna", "Todd", "Carolyn", "Desmond", "Gabriela", "Lillianna"))
+more_student_grades <- 
+  structure(
+    runif(50) * 30 + 70,
+    names = c("Jaylan", "Luke", "Haiden", "Rowan", "Tessa", "Kash", "Valentin", "Lailah", "Amare", 
+              "Frankie", "Jude", "Maci", "Abigail", "Sawyer", "Lexi", "Reyna", "Elizabeth", "Rylee", "Leroy", 
+              "Camren", "Jordyn", "Kaleigh", "Shyann", "Heaven", "Holden", "Alaina", "Barbara", "Miles", "Isaias", 
+              "Carsen", "Tristian", "Chaz", "Chaim", "Felix", "Leilani", "Kyan", "Ashlyn", "Skylar", "Judah", 
+              "Meredith", "Deangelo", "Dania", "Abdullah", "Aron", "Julianna", "Todd", "Carolyn", "Desmond",
+              "Gabriela", "Lillianna"
+    ))
 more_student_names <- names(more_student_grades)
 ```
 
@@ -837,15 +840,16 @@ Let's say you are teaching a course and your section of the course has all of th
 
 ```{r grades_for_A_to_M-setup}
 dummy <- set.seed(330330)
-more_student_grades <- structure(runif(50) * 30 + 70, names = c("Jaylan", 
-    "Luke", "Haiden", "Rowan", "Tessa", "Kash", "Valentin", "Lailah", 
-    "Amare", "Frankie", "Jude", "Maci", "Abigail", "Sawyer", 
-    "Lexi", "Reyna", "Elizabeth", "Rylee", "Leroy", "Camren", 
-    "Jordyn", "Kaleigh", "Shyann", "Heaven", "Holden", "Alaina", 
-    "Barbara", "Miles", "Isaias", "Carsen", "Tristian", "Chaz", 
-    "Chaim", "Felix", "Leilani", "Kyan", "Ashlyn", "Skylar", 
-    "Judah", "Meredith", "Deangelo", "Dania", "Abdullah", "Aron", 
-    "Julianna", "Todd", "Carolyn", "Desmond", "Gabriela", "Lillianna"))
+more_student_grades <- 
+  structure(
+    runif(50) * 30 + 70,
+    names = c("Jaylan", "Luke", "Haiden", "Rowan", "Tessa", "Kash", "Valentin", "Lailah", "Amare", 
+              "Frankie", "Jude", "Maci", "Abigail", "Sawyer", "Lexi", "Reyna", "Elizabeth", "Rylee", "Leroy", 
+              "Camren", "Jordyn", "Kaleigh", "Shyann", "Heaven", "Holden", "Alaina", "Barbara", "Miles", "Isaias", 
+              "Carsen", "Tristian", "Chaz", "Chaim", "Felix", "Leilani", "Kyan", "Ashlyn", "Skylar", "Judah", 
+              "Meredith", "Deangelo", "Dania", "Abdullah", "Aron", "Julianna", "Todd", "Carolyn", "Desmond",
+              "Gabriela", "Lillianna"
+    ))
 more_student_names <- names(more_student_grades)
 ```
 

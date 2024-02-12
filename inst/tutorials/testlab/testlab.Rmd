@@ -116,11 +116,21 @@ grade_code()
 
 
 
+
+
+
+
+
+
+
+
 ### Quiz
 
 
 
-*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to  define a question and the `quiz` function for grouping multiple questions together.*
+*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to  define a question and the 
+
+`quiz` function for grouping multiple questions together.*
 
 ```{r}
 x=4
