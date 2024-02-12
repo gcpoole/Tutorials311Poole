@@ -51,11 +51,11 @@ We've also worked with `atomic vectors`, which are ordered collections of values
 
 
 
-We refer to these relationships as "inheritance."  We say "`numeric` inherits from `atomic`".  By this be mean that `numeric`s have all of the properties of `atomic`s, plus a few more.  More importantly, if you can do a particular operation on an object type, you can do that same operation on any object that inherits from that type.  
+We refer to these relationships as "inheritance."  We say "`numeric` inherits from `atomic`".  By this be mean that `numerics` have all of the properties of `atomic`s, plus a few more.  More importantly, if you can do a particular operation on an object type, you can do that same operation on any object that inherits from that type.  
 
-For instance, the `+` operator is designed to work on `numeric` vectors.  Therefore, it will work with either `integer`s or `double`s.  Importantly, the `[` operator (for indexing) is designed to work on vectors, so it works on any type of vector.
+For instance, the `+` operator is designed to work on `numeric` vectors.  Therefore, it will work with either `integers` or `doubles`.  Importantly, the `[` operator (for indexing) is designed to work on vectors, so it works on any type of vector.
 
-## The other type of vetor: a `list`.
+## The other type of vector: a `list`.
 
 So, if an `atomic` vector is an ordered collection of values, what is a `list` vector? Well, as `list` vector (which is usually just called a `list`) is an ordered collection of `objects`.  
 
@@ -70,7 +70,7 @@ Try making a list below.  We'll use the `list` function to create a list of leng
 See if you can fill in the blanks so that the list has:
 
 - the `letters` vector in the first position,
-- a vector of `integer`s ranging from 1 to 10 in the second position, and 
+- a vector of `integers` ranging from 1 to 10 in the second position, and 
 - the `sum` function in the third position.
 
 Don't forget to display the list!
@@ -357,6 +357,7 @@ a_named_list
 In the sandbox below:
 
 - change the code so that the names "letters", "integers", and "sum_function" are included in `my_list` at the time the `list` is created.
+- display `my_list`
 
 ```{r name_when_creating_list, exercise=TRUE}
 my_list <- list(letters, 1:10, sum)
@@ -364,6 +365,7 @@ my_list <- list(letters, 1:10, sum)
 
 ```{r name_when_creating_list-solution}
 my_list <- list(letters = letters, integers = 1:10, sum_function = sum)
+my_list
 ```
 
 ```{r name_when_creating_list-code-check}
@@ -450,13 +452,13 @@ quiz(
 
 Finally, see if the following code makes sense.  Remember, `(` instructs R to call the function found before the `(` by passing the arguments found between the `(` and the `)`.
 
-```{r}
+```{r, echo=TRUE}
 my_list$sum_function(my_list$integers)
 ```
 
 and
 
-```{r}
+```{r, echo=TRUE}
 my_list[[3]](my_list[[2]])
 ```
 
@@ -464,17 +466,17 @@ Pretty wild, huh?
 
 ### R likes to makes copies.
 
-With only one exception (which we will explore later in the course), R always make copies of `object`s when they are assigned to a name (using `<-`) or placed in a `list`.
+With only one exception (which we will explore later in the course), R always make copies of `objects` when they are assigned to a name (using `<-`) or placed in a `list`.
 
 So realize that we don't actually have the `letters` vector in `my_list`.  We have a *copy* of the `letters` vector.  Similarly, we don't have the `sum` function, but a *copy* of the sum function.  This means that we can play with or modify objects contained in a `list` without fear of modifying the original objects from which they may have been derived.
 
 ## Data.frames
 
-So we have reached the point where you have all of the knowledge you need to start working with read data sets.  In R, data sets are stored in objects called `data.frame`s.
+So we have reached the point where you have all of the knowledge you need to start working with real data sets.  In R, data sets are stored in objects called `data.frames`.
 
-`data.frame`s contain tabular data.  In other words, `data.frame`s have data arranged in rows and columns.
+`data.frames` contain tabular data.  In other words, `data.frames` have data arranged in rows and columns.
 
-R has some built-in `data.frame`s.  Consider `mtcars`:
+R has some built-in `data.frames`.  Consider `mtcars`:
 
 ```{r}
 mtcars
@@ -556,11 +558,11 @@ ncol(mtcars)
 grade_code()
 ```
 
-## `data.frame`s are `list`s
+## `data.frames` are `list`s
 
-What's important to realize, here, is that `data.frame`s are `list`s.  They `list`s with superpowers, but they are `list`s none-the-less.  
+What's important to realize, here, is that `data.frames` are `lists`.  They `lists` with superpowers, but they are `lists` none-the-less.  
 
-In other words, `data.frame`s can do more than a regular `list`.  However, since a `data.frame` is a `list`, everything you just learned about `list`s applies to a `data.frame`.
+In other words, `data.frames` can do more than a regular `list`.  However, since a `data.frame` is a `list`, everything you just learned about `lists` applies to a `data.frame`.
 
 The secret?  Just remember that a `data.frame` is a `list` of `vectors`; each `vector` represents a column in the `data.frame`.
 
@@ -586,7 +588,7 @@ is.list(mtcars)
 grade_code()
 ```
 
-So, if a `data.frame` is a `list` of `vectors` that each represent columns, then what would the names of the `vectors` in the `list` represent? Try it out:
+So, if a `data.frame` is a `list` of `vectors` that each represent columns, then what would the names of the `vectors` in the `list` represent? Do the following and then compare the results from each command in the sandbox:
 
 - Use `names()` to get the names of the items in `mtcars`
 - Then use `str()` to view the structure of `mtcars` again.
@@ -604,7 +606,7 @@ str(mtcars)
 grade_code()
 ```
 
-Sure! The names in the `list` must be the column names!  And so they are!
+Sure! The names of the items in the `list` must be the column names for the `data.frame`!  And so they are!
 
 How about the length of the `list`?
 
@@ -624,7 +626,7 @@ ncol(mtcars)
 grade_code()
 ```
 
-Makes sense, right?
+The number of items in (length of) the `list` is equal to the number of columns in the `data.frame`.  Makes sense, right?
 
 ### Extracting columns from a data.frame
 
@@ -681,11 +683,11 @@ nrow(mtcars)
 grade_code()
 ```
 
-Make sense?
+If each column in the `data.frame` is a `vector`, then the length of the vectors is the number of rows in the `data.frame`. Make sense?
 
 ### Summary statistics on columns
 
-You can calcuate summary statistic on colums to characterize the data in `mtcars`.
+You can calculate summary statistic on column to characterize the data in `mtcars`.
 
 Try these:
 
@@ -707,9 +709,9 @@ unique(mtcars$cyl)
 grade_code()
 ```
 
-## Indexing `data.frame`s
+## Indexing `data.frames`
 
-`Data.frame`s are lists.  Therefore, they can be indexed with `[`.  In other words, you can extract a subset of a `data.frame` using the `[` operator.  Because they are lists, they can be indexed with a single vector, just as you have practiced.  Give it a try:
+`Data.frames` are lists.  Therefore, they can be indexed with `[`.  In other words, you can extract a subset of a `data.frame` using the `[` operator.  Because they are lists, they can be indexed with a single vector, just as you have practiced.  Give it a try:
 
 - use `[` to subset mtcars.  Include columns 1, 4, and 6.  Assign the result to `three_column_mtcars`.
 - display the first four rows of `three_column_mtcars`
@@ -730,7 +732,7 @@ grade_code()
 Try again:
 
 - Use `[` to subset mtcars.  Include columns "mpg", "hp", and "wt".  Assign the result to `three_column_mtcars`.
-- display the first five rows of `three_column_mtcars`
+- display the first *five* rows of `three_column_mtcars`
 
 
 ```{r index_mtcars_as_list_2, exercise=TRUE}
@@ -739,7 +741,7 @@ Try again:
 
 ```{r index_mtcars_as_list_2-solution}
 three_column_mtcars <- mtcars[c("mpg", "hp", "wt")]
-head(three_column_mtcars, 4)
+head(three_column_mtcars, 5)
 ```
 
 ```{r index_mtcars_as_list_2-code-check}
@@ -749,7 +751,7 @@ grade_code()
 One more time:
 
 - Use `[` to subset mtcars.  Include columns the columns corresponding to TRUE in the following list: TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE.  Assign the result to `three_column_mtcars`.
-- display the three five rows of `three_column_mtcars`
+- display the first *three* rows of `three_column_mtcars`
 
 
 ```{r index_mtcars_as_list_3, exercise=TRUE}
@@ -766,13 +768,16 @@ head(three_column_mtcars, 3)
 grade_code()
 ```
 
-However, `data.frame`s have two dimensions, represented by rows and columns.  They can also be indexed in two dimension by putting TWO indexing vectors inside `[ ]` -- the first index subsets the rows and the second subsets the columns.  
+Remember, however, that `data.frames` have two dimensions, represented by rows and columns.  So, they can also be indexed in two dimension by putting TWO indexing vectors inside `[ ]` -- the first index subsets the rows and the second subsets the columns.  
 
 For instance, we can take a subset of the only those cars that have 4 cylinder engines and keep only the first three columns.
 
-```{r}
-# remember, there are 32 rows in mtcars so has_four_cyl will be
-# a logical vector of length 32!
+```{r, echo=TRUE}
+# remember, there are 32 rows in mtcars so `has_four_cyl` will be
+# a logical vector of length 32!  If you don't remember what `==`
+# does, in the console, use ?`==` (include the backticks.  The
+# backtick key is in the upper left of the keyboard, below
+# <escape>)
 has_four_cyl <- mtcars$cyl == 4
 has_four_cyl
 mtcars[has_four_cyl, 1:3]
@@ -796,9 +801,9 @@ mtcars[has_poor_fuel_economy, c("mpg", "cyl", "hp", "wt", "gear")]
 grade_code()
 ```
 
-If you want to include *all* of the columns but still filter the rows, you can leave out the index for the rows, but *be sure to include the comma* to R knows to use two dimensional indexing!  For instance:
+If you want to include *all* of the columns but still filter the rows, you can leave out the index for the rows, but *be sure to include the comma* to R knows to use two dimensional indexing!  For instance, the following displays all columns for the car models with four cylinder engines.
 
-```{r}
+```{r, echo=TRUE}
 mtcars[has_four_cyl, ]
 ```
 
@@ -822,7 +827,13 @@ mtcars[has_poor_fuel_economy, ]
 grade_code()
 ```
 
-You can also leave out the row index to include all the rows, although this is the same as indexing with a single vector:
+You can also leave out the row index to include all the rows.  For instance:
+
+```{r, echo=TRUE}
+mtcars[, c("mpg", "cyl", "hp", "wt", "gear")]
+```
+
+Yields all rows, but only the specified columns. Of course this is the same as indexing with a single vector:
 
 ```{r}
 identical(
@@ -832,6 +843,70 @@ identical(
   mtcars[c("mpg", "cyl", "hp", "wt", "gear")]
 )
 ```
+
+### Putting it tegether
+
+"Displacement" is the sum of volume of all cylinders in a car.  Therefore, we'd expect more displacement for cars with more cylinders in their engines.
+
+Try this... You can index the rows of `mtcars` and then use the `$` function to extract a column.  The column will contain date from only those rows selected by the index.  By indexing `mtcars` and then extracting a column... 
+
+- find the mean displacement for 4 cylinder engines
+- find the mean displacement for 6 cylinder engines
+- find the mean displacement for 8 cylinder engines
+
+```{r index_then_extract, exercise=TRUE}
+
+```
+
+```{r index_then_extract-solution}
+mean(mtcars[mtcars$cyl == 4, ]$disp)
+mean(mtcars[mtcars$cyl == 6, ]$disp)
+mean(mtcars[mtcars$cyl == 8, ]$disp)
+```
+
+```{r index_then_extract-code-check}
+grade_code()
+```
+
+### A note about the `[` operator (indexing)
+
+By default, when you index a data.frame by row and column, but ask for only one column, you get a `vector` in return.  Notice the result of the following code is not a data.frame:
+
+```{r, echo=TRUE}
+mtcars[mtcars$cyl == 4, "disp"]
+```
+
+This is unexpected. 
+
+The rule is that `[` should always return the same type of object that is being indexed.  Therefore, if you index a `data.frame`, you should get a `data.frame`
+
+There is another type of `data.frame` called a `tibble` that follows the rules.  You will always get a `tibble` when you index a `tibble` -- always.  We'll learn more about `tibbles` later on, but for now, let's convert mtcars to a tibble and try two different ways of extracting a column from a subset of rows in a `data.frame.`
+
+
+```{r, echo=TRUE}
+# make a copy of mtcars as a tibble.
+mtcars_tibble <- tibble::as_tibble(mtcars)
+
+# compare results when we select several rows and *one* 
+# column using indexing...
+identical(
+  # index one column from mtcars yields a vector
+  mtcars[mtcars$ccyl == 4, "mpg"],
+  # index one column from mtcars_tibble yields a 
+  # one-column data.frame
+  mtcars_tibble[mtcars_tibble$cyl == 4, "mpg"]
+)
+
+# select some rows across all columns, then extract a column...
+identical(
+  # from mtcars yields a vector
+  mtcars[mtcars$cyl == 4, ]$mpg,
+  # from mtcars_tibble also yields a vector
+  mtcars_tibble[mtcars_tibble$cyl == 4, ]$mpg
+)
+```
+
+Your code with be more consistent and therefore less error prone if you use the second method -- use *indexing* to select the rowse you want and then *extract* the column of interest!
 
 ### Nice work!
 
