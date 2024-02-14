@@ -1,0 +1,450 @@
+---
+title: "ENSC311 Lec 09: Classes, packages, and environments"
+tutorial:
+  id: "ENSC311_Lec09"
+output: 
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+description: "An introduction to packages, environments, and tibbles"
+---
+<!-- File created by tutorialize.  Do not edit by hand. -->
+
+```{r setup, include=FALSE}
+library(learnr)
+knitr::opts_chunk$set(echo = FALSE)
+gradethis::gradethis_setup()
+options(tutorial.event_recorder = tutorialize::recorder)
+options(tutorial.storage = learnr::filesystem_storage(file.path(path.expand("~"), "_learnr_storage_")))
+```
+
+## Packages
+
+In their simplest form, packages are collections of R `functions` that you can install to add new functionality to R.  (Hahaha!  Get it?  `function`ality??  I love a good pun...)
+
+### Installing vs. updating vs. loading packages
+
+One thing that is confusing to new R users is the difference between "installing" a package and "loading" a package.
+
+When you *install* a package, you are downloading it from the internet and preparing it for use.  This only needs to be done once.  After the package is *installed*, it is sitting on your computer's hard drive (i.e., in your computer's permanent storage).
+
+Packages are installed using the "packages" tab in the lower right pane of R studio.  You can click the "Install" button at the top of the pane, type the name of the package, and it will be installed on your computer from what is knows as CRAN -- the "Comprehensive R Archive Network."
+
+After a package is *installed*, you must to *load* the package in order to use it.  *Loading* the package brings the package into your current instance of R. If you are using R-studio locally on your computer, you need to *load* the packages you want to use each time you open R-Studio.  On the Posit Cloud, it's less straightforward.  Sometimes the packages you loaded will still be ready for use and other times they will have to be reloaded when you log off.
+
+Bottom line, if the functions you want to use from a package are not available, and the package is *installed*, you just have to *load* the package.
+
+You can load a package from the "Packages" pane simply by scrolling through the list, finding the package, and checking the box next to the package.
+
+Or, you can use the `library()` function to load a package.  If you watch the console when you load a package from the "Packages" tab in RStudio, you will see many examples of how to use the `library()` command appear in the console.
+
+## The tibble package
+
+In the sandbox below, 
+
+- try to use the `as_tibble()` function to convert `mtcars` to a `tibble` by entering the command `as_tibble(mtcars)`.  (You can't submit your answer becuase you will encounter an error...)
+
+```{r as_tibble_error, exercise=TRUE}
+
+```
+
+Why can't you use `as_tibble()`?  Well, the `as_tibble()` function is not part of the base R packages.  Instead, it's found in the `tibble` package.  So you have to load the `tibble` package before you can use `as_tibble()`. In the sandbox below:
+
+- display the class of `mtcars` using the `class()` command.
+- load the `tibble` package using the `library()` command.
+- then, use `as_tibble()` to convert `mtcars` to a tibble; assign the result to `mtcars_tib`.
+- display the class of `mtcars_tib`
+
+```{r as_tibble_mtcars, exercise=TRUE}
+
+```
+
+```{r as_tibble_mtcars-solution}
+class(mtcars)
+library(tibble)
+mtcars_tib <- as_tibble(mtcars)
+class(mtcars_tib)
+```
+
+```{r as_tibble_mtcars-code-check}
+grade_code()
+```
+
+That's sort of interesting, isn't it?  `mtcars_tib` has three classes! It's a `tbl_df`, a `tbl`, and a `data.frame`.  There's a lot of nuance to this that I won't try to cover here, but suffice it to say that the result of `class()` tells you that `mtcars_tib` is a `tibble`, but it's also still a `data.frame` and can be treated as such!
+
+### Use a package function once
+
+While it's convenient to load a package using `library()`, it's not strictly necessary.  This can be helpful for reasons we will cover later in the tutorial.  For now, let's see how we do it.
+
+The `::` operator allows you to use a function from a specific package without loading the package.  
+
+To use the `::` operator, simply put the package name before the `::` and the function call after the `::`.  *Don't* put the package name or the function call in quotes.
+
+The `as_tibble` function is also found in the `dplyr` package.  In the sandbox below:
+
+- use the `::` operator to call the `as_tibble()` function from the `dplyr` package and pass `mtcars` into the function.  Assign the result to `mtcars_tib` again.
+- display the class of `mtcars_tib`
+
+```{r as_tibble_mtcars_dplyr, exercise=TRUE}
+
+```
+
+```{r as_tibble_mtcars_dplyr-solution}
+mtcars_tib <- dplyr::as_tibble(mtcars)
+class(mtcars_tib)
+```
+
+```{r as_tibble_mtcars_dplyr-code-check}
+grade_code()
+```
+
+### So what's with `tibble`
+
+Why do we have `tibbles`?  What's wrong with plain vanilla `data.frames`? (BTW, "plain vanilla" is a lovely oxymoron!  But I digress...)
+
+There are two key differences between `tibbles` and `data.frames` that you will run into.  They are subtle.  
+
+We already examined the first difference in the prior tutorial.  If you *index*  a single column from a `data.frame` using the `[` operator, R returns a `vector`.  Try that now.
+
+- using two-dimensional indexing, extract all rows but just the "mpg" column from `mtcars`
+- then, do the exact same thing using `mtcars_tib`
+
+```{r single_column_index-setup}
+mtcars_tib <- tibble::as_tibble(mtcars)
+```
+
+```{r single_column_index, exercise=TRUE}
+
+```
+
+```{r single_column_index-solution}
+mtcars[ , "mpg"]
+mtcars_tib[ , "mpg"]
+```
+
+```{r single_column_index-code-check}
+grade_code()
+```
+
+The other difference can only be seen in the console and is best demonstrated using a different built-in `data.frame` called `iris`.  So over *in the console* (the console tab in the lower left pane of RStudio), display the data in `iris` by entering:
+
+`iris`
+
+Watch what happens.  `iris` is a bigger data.frame and is a little unweildy to display.  Now, again in the console, enter the following to display `iris` as a `tibble`: 
+
+`tibble::as_tibble(iris)`
+
+It's the same data, but as a `tibble` it displays in a more orderly and concise manner.  
+So basically, `tibbles` print more concisely and, when you index them, they *always* return a `tibble`.  On the other hand, `data.frames` print in a more verbose manner and will return a `vector` when a single column is requested during indexing.
+
+So that's not much difference, really.  (There are other subtle differences, but we need to learn about the "tidyverse" later on in the course to find the other differences...)
+
+So for most purposes, `data.frames` and `tibbles` are interchangable.  Knowing about `tibbles` is important, though, because `tibbles` are very common!  In fact, I usually convert `data.frames` to `tibbles` before I work with them because I like the way `tibbles` are displayed.
+
+And besides, by exploring `tibbles`, we had a good excuse to show the utility of the `class()` function!
+
+## Name collisions
+
+So in the sandbox below:
+
+- use the `c()` function to build and display a numeric `vector` containing the values 10, 20, and 30.  
+- display `letters`
+
+Be sure to run your code before you submit it...
+
+```{r override_c_and_letters-setup}
+c <- function(...) "I'm sorry. I won't build that vector. You didn't say please."
+letters <- "You're out of luck.  The alphabet is on strike!"
+```
+
+```{r override_c_and_letters, exercise=TRUE}
+
+```
+
+```{r override_c_and_letters-solution}
+c(10,20,30)
+letters
+```
+
+```{r override_c_and_letters-code-check}
+grade_code()
+```
+
+Say what???
+
+Hmmm.  Try again.  Let's be more specific.
+
+- Make a `vector` containing 10, 20, and 30 using `c()`, but this time specifically call `c` from the `base` package using the `::` operator.
+- Similarly, display `letters` from the `base` package using the `::` operator.
+
+```{r override_c_and_letters_base-setup}
+c <- function(...) "I'm sorry. I won't build that vector. You didn't say please."
+letters <- "You're out of luck.  The alphabet is on strike!"
+```
+
+```{r override_c_and_letters_base, exercise=TRUE}
+
+```
+
+```{r override_c_and_letters_base-solution}
+base::c(10,20,30)
+base::letters
+```
+
+```{r override_c_and_letters_base-code-check}
+grade_code()
+```
+
+That's better.  So what gives?
+
+Well, in the background of this tutorial, I just created the following function:
+
+```{r, echo=TRUE}
+c <- 
+  function(...) {
+    return("I'm sorry. I won't build that vector. You didn't say please.")
+  }
+```
+
+Basically, no matter what you pass to the function, it just returns the character string "I'm sorry. I won't build that vector. You didn't say please."
+
+Also, in the background, I made a character `vector` and assigned it to the name `letters` like this:
+
+```{r, echo=TRUE}
+letters <- "You're out of luck.  The alphabet is on strike!"
+```
+
+This is an example of a "name collision" -- a case where the user creates a name that matches a name already used in R.
+
+Clearly, my `c()` function didn't destroy the `c()` function in the base package.  The original is still there in the `base` package...
+
+```{r, echo=TRUE}
+base::c(10, 20, 30)
+```
+
+Nor did my `letters` destroy the built-in `letters`
+
+```{r, echo=TRUE}
+base::letters
+```
+
+The built-in versions still exist in the base package.  R just doesn't use them any more... *unless* we specifically point to the `base` package with the `::` operator.
+
+Now I'm going to remove (destroy) my `c()` function and my `letters` vector using the `rm()` function:
+
+```{r, echo=TRUE}
+rm(c, letters)
+```
+
+Now check it out...
+
+```{r, echo=TRUE}
+c(10, 20, 30)
+letters
+```
+
+So how does R maintain two copies of the same name?
+
+## Environments
+
+An `Environment` is a special collection that is not ordered.  Therefore, you can't index it with the `[`.  Further, an environment can only contain `object names.` 
+
+However, because `object names` are usually associated with objects, an `environment` serves as a way to create (effectively) a collection of objects that are associated with the `names` in the `environment`.
+
+You are familar with one `environment` already.  If you create an `object name` from the console using the `<-` assignment operator, the `object name` is created in the "global environment".  The global environment is what you view in the "environment" tab of the upper right pane in R Studio.
+
+R maintains a "stack" of environments, that you can view by clicking on the "Global Environment" drop down list under the "Environments" tab of the upper right pane in R Studio.
+
+- Switch over to the "Environment" tab now, and look that the `environments` under the "Global Environment" drop down list.  This is the current "Environment Stack" 
+
+When you view that drop down list, you will notice that all of the environments other than the "Global Environment" are labeled `package::<whatever>`.  This is the list of packages that are currently installed.
+
+By default, R has the `stats`, `graphics`, `grDevices`, `utils`, `datasets`, `methods`, and `base` packages installed.  The packages are referred to, collectively, as "base R".
+
+### Packages have environments
+
+Importantly, every package has its own environment where all of the `names` of the package's objects (including the package's functions) are stored.  
+
+Let's say you enter the follow command in the R console:
+
+```{r, echo=TRUE, eval=FALSE}
+x <- sum(1, 2, 3, 4)
+```
+
+In order to run the `sum()` function, R has to find it. R searches through the `object names` in the available `environments` for the object name `sum`.  
+
+R starts the search in the "Global Environment".  If it doesn't find `sum` there, it moves down the "stack" of package environments, checking each package environment for the name `sum`.  R runs the first function it finds that is named `sum`.  Any other functions named `sum` lower in the environment stack are ignored.
+
+Therefore, if you create a `sum()` function in the "Global Environment", your `sum()` function will be at the top of the stack of environments.  When looking for a `sum()` function, R will find your `sum()` function first and run it.
+
+As you saw above, the `::` operator bypasses the search of the `environment` stack and forces R to look inside only the package specified in front of the `::`.
+
+### An excited `sum` function
+
+In the sandbox below:
+
+- create a function called `sum`.  
+- the function should accept the `...` parameter so that it can take any number of arguments.
+- the function should print "This is so exciting!!". (Within a function, you must call the `print()` function explicitly; you can't just type the name of the object to display...)
+- then, it should return the sum of `...` by calling `sum()` from the `base` package
+- call your `sum()` function, using `1:10`.
+
+Hint: When you write a `function` that accepts `...` as a parameter, you can simply pass `...` to another `function` from within the body of your `function`.
+
+```{r excited_sum, exercise=TRUE}
+
+```
+
+```{r excited_sum-solution}
+sum <- function(...) {
+  print("This is so exciting!!")
+  return(base::sum(...))
+}
+sum(1:10)
+```
+
+```{r excited_sum-code-check}
+grade_code()
+```
+
+Now your excited `sum()` function is in this tutorial's environment, which is on top of a stack of package `environments`.  So R will find your excited `sum()` function before it finds the `sum()` function in the `base` package environment.  So:
+
+- call your `sum()` function again, using `1:100`.
+- call the `sum()` function in the `base` package using `1:100`
+
+```{r call_excited_sum-setup}
+sum <- function(...) {
+    print("This is so exciting!!")
+    return(base::sum(...))
+}
+```
+
+```{r call_excited_sum, exercise=TRUE}
+
+```
+
+```{r call_excited_sum-solution}
+sum(1:100)
+base::sum(1:100)
+```
+
+```{r call_excited_sum-code-check}
+grade_code()
+```
+
+If you remove your excited `sum()` function from the tutorial's environment, R will once again look down the package stack and find the `sum()` function in the `base` package  So:
+
+- use `rm()` to remove your excited `sum()` function.
+- call `sum()` with `1:100` one last time to show that the `sum` function behavior is once again very bland.
+
+```{r remove_excited_sum-setup}
+sum <- function(...) {
+    print("This is so exciting!!")
+    return(base::sum(...))
+}
+```
+
+```{r remove_excited_sum, exercise=TRUE}
+
+```
+
+```{r remove_excited_sum-solution}
+rm(sum)
+sum(1:100)
+```
+
+```{r remove_excited_sum-code-check}
+grade_code()
+```
+
+## Loading packages redux
+
+There are only few more details to understand about loading packages...
+
+### The package stack
+
+Whenever you load a package (using the `library()` function), its environment is placed on the package environment stack *directly beneath the `Global Environment`!* 
+
+Therefore, if two packages have `functions` of the same name, the `function` in the most recently loaded package will become the default.  This is called "masking" a function.
+
+In the sandbox below, 
+
+- load the `dplyr` package using the `library()` function.  Pay attention to the message you get the first time you load it successfully...
+
+```{r load_dplyr, exercise=TRUE}
+
+```
+
+```{r load_dplyr-solution}
+library(dplyr)
+```
+
+```{r load_dplyr-code-check}
+grade_code()
+```
+
+Notice R reports that `filter()` and `lag()` are masked from the `stats` package and that `intersect()`, `setdiff()`, `serequal()` and `union()` are masked from the base package.
+
+This means that the `dplyr` package has `functions` assigned to all of these names and, now that the `dplyr` package is loaded, if you want to call the base R versions of these functions, you will need to use the `::` operator to specify, for instance, `stats::filter()` or `base::intersect()`.
+
+This is seldom something to worry about, because a good package developer won't mask another function without good reason.  But it's good to know when, for instance, the `filter()` function isn't working as you think it should.
+
+Now, another thing to try in the console...
+
+- *In the console*, again run `library(dplyr)`.
+- Use `?filter`
+
+Note that R now asks you to select the version of `filter()` for which you want help.  This is your clue that `filter()` is in more than one package and that, if you are having trouble, you might be calling the wrong verion of `filter()`.
+
+### Other miscellany
+
+- If you try to load a package again, while it is already loaded, R sees that the package is already loaded and does *nothing*!  The package stack is *not* reordered.
+
+- You can *unload* a package from the `Packages` tab in the lower right pane or R Studio by simply unchecking the associated box.  If you reload the package *after* unloading it, the package stack *will* be reordered!
+
+- If you choose "Restart R" from the session menu, all packages are unloaded and the package stack is reset to just the default ("base R") collection of packages.
+
+
+## Plotting
+
+The last topic will will cover in this totorial is a quick introduction to plotting using the "base R" packages.
+
+In the last lab, you used the `hist()` function to make a histogram plot.
+
+The `plot()` function is the work-horse of base R plotting, however.  Typically, you pass in two vectors to the `x` and `y` parameters of the function, and R makes a scatter plot of the two vectors.  The values of the `x` vector (the first one passed) are shown on the horizontal x-axis and the values of the `y` vector (the second one passed) are shown on the vertical `y` axis.
+
+Let's plot displacement (the volume of the engine's cylinders) against horsepower for the cars in `mtcars`.
+
+- using extraction (the `$` operator), pass the `disp` column and the `hp` column from `mtcars` to the plot function.
+
+```{r plot_hp_vs_disp_1, exercise=TRUE}
+
+```
+
+```{r plot_hp_vs_disp_1-solution}
+plot(mtcars$disp, mtcars$hp)
+```
+
+```{r plot_hp_vs_disp_1-code-check}
+grade_code()
+```
+
+Note that the `plot()` function will do different things depending on what type of object you pass to plot.  If you pass a `data.frame` to `plot()`, it will make a grid of graphs that showes every column plotted against every other column in the `data.frame`!
+
+```{r, echo = TRUE}
+plot(mtcars)
+```
+
+Yikes!  This is overwhelming.  Let's try `iris`:
+
+```{r, echo = TRUE}
+plot(iris)
+```
+
+Look at the boxes with the labels.  If you want to see the plot of "Petal.Length" on the x-axis, look in the "Petal.Length" *column*.  In that *column* the y-axis of the graphs contain the data in the lable box in the same *row*.  In other words, from top to bottom in the "Petal.Length" column, the graphs show `Sepal.Length`, `Sepal.Width`, `Petal.Width`, and `Species` on the y-axis, plotted against `Petal.Length` on the x-axis.
+
+Cool huh?
+
+### Nice work
+
+You've completed the Lecture 9 assignment.  Please create the submission file by calling `ENSC311::submit_ENSC()`.  Find the number associated with the "Lecture 9" file and then call `ENSC311::submit_ENSC(<FileNumber>)` but replace `<FileNumber>` with the number of the file.  You should then see a "submit_..." file on the "Files" tab of the lower right pane in R Studio.  Please submit the Lecture 9 "submit_..." file to D2L.
