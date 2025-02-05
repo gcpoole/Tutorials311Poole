@@ -400,7 +400,7 @@ Note that R now asks you to select the version of `filter()` for which you want 
 
 - If you try to load a package again, while it is already loaded, R sees that the package is already loaded and does *nothing*!  The package stack is *not* reordered.
 
-- You can *unload* a package from the `Packages` tab in the lower right pane or R Studio by simply unchecking the associated box.  If you reload the package *after* unloading it, the package stack *will* be reordered!
+- You can *unload* a package from the `Packages` tab in the lower right pane or R Studio by simply unchecking the associated box.  If you reload the package *after* unloading it, the package stack *will* be reordered!  The package you unload and reload will be placed at the top of the stack!
 
 - If you choose "Restart R" from the session menu, all packages are unloaded and the package stack is reset to just the default ("base R") collection of packages.
 
@@ -411,7 +411,7 @@ The last topic will will cover in this totorial is a quick introduction to plott
 
 In the last lab, you used the `hist()` function to make a histogram plot.
 
-The `plot()` function is the work-horse of base R plotting, however.  Typically, you pass in two vectors to the `x` and `y` parameters of the function, and R makes a scatter plot of the two vectors.  The values of the `x` vector (the first one passed) are shown on the horizontal x-axis and the values of the `y` vector (the second one passed) are shown on the vertical `y` axis.
+The `plot()` function is the work-horse of base R plotting, however.  Typically, you pass in two vectors to the `x` and `y` parameters of the function, and R makes a scatter plot of the two vectors.  The values of the `x` vector (the first one passed) are shown on the horizontal x-axis and the values of the `y` vector (the second one passed) are shown on the vertical y-axis.
 
 Let's plot displacement (the volume of the engine's cylinders) against horsepower for the cars in `mtcars`.
 

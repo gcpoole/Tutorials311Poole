@@ -11,8 +11,8 @@ description: "An introduction to data.frames -- indexing (subsetting) tabular da
 ---
 
 ```{r setup, include=FALSE}
-library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
+library(learnr)
 gradethis::gradethis_setup()
 options(tutorial.event_recorder = tutorialize::recorder)
 options(tutorial.storage = learnr::filesystem_storage(file.path(path.expand("~"), "_learnr_storage_")))

@@ -5,7 +5,6 @@ tutorial:
 output: learnr::tutorial
 runtime: shiny_prerendered
 ---
-<!-- File created by tutorialize.  Do not edit by hand. -->
 
 ```{r setup, include=FALSE}
 library(learnr)
