@@ -15,8 +15,15 @@ knitr::opts_chunk$set(echo = FALSE)
 library(learnr)
 library(ENSC311)
 gradethis::gradethis_setup()
-options(tutorial.event_recorder = tutorialize::recorder)
+options(tutorial.event_recorder = tutorialize::mongo_recorder)
 options(tutorial.storage = learnr::filesystem_storage(file.path(path.expand("~"), "_learnr_storage_")))
+
+options(tutorial.events_collection = 
+  mongolite::mongo(
+    db = "tutorial",
+    collection = "events",
+    url = persistR::getPersistent("db_key", "~/R/persistR")))
+
 ```
 
 ## Vectors
@@ -51,16 +58,16 @@ Try it yourself:
 - Create a vector containing the integer values from 5 to 9 and assign it to the name `my_vector`.
 - Display `my_vector`
 
-```{r vector_using_c, exercise=TRUE}
+```{r 01_vector_using_c, exercise=TRUE}
 
 ```
 
-```{r vector_using_c-solution}
+```{r 01_vector_using_c-solution}
 my_vector <- c(5, 6, 7, 8, 9)
 my_vector
 ```
 
-```{r vector_using_c-code-check}
+```{r 01_vector_using_c-code-check}
 grade_code()
 ```
 
@@ -95,29 +102,29 @@ example_sequence
 
 Can you use the `:` operator to make a vector of integers from -10 to 10?
 
-```{r vector_using_colon_1, exercise=TRUE}
+```{r 02_vector_using_colon_1, exercise=TRUE}
 
 ```
 
-```{r vector_using_colon_1-solution}
+```{r 02_vector_using_colon_1-solution}
 -10:10
 ```
 
-```{r vector_using_colon_1-code-check}
+```{r 02_vector_using_colon_1-code-check}
 grade_code()
 ```
 
 What happens when you reverse the numbers?
 
-```{r vector_using_colon_2, exercise=TRUE}
+```{r 03_vector_using_colon_2, exercise=TRUE}
 
 ```
 
-```{r vector_using_colon_2-solution}
+```{r 03_vector_using_colon_2-solution}
 10:-10
 ```
 
-```{r vector_using_colon_2-code-check}
+```{r 03_vector_using_colon_2-code-check}
 grade_code()
 ```
 
@@ -139,15 +146,15 @@ In the sandbox below:
 
 - Call the `seq()` function; pass `30` to the `from` parameter, `40` to the `to` parameter, and `2` to the `by` parameter.
 
-```{r vector_using_seq_1, exercise=TRUE}
+```{r 04_vector_using_seq_1, exercise=TRUE}
 
 ```
 
-```{r vector_using_seq_1-solution}
+```{r 04_vector_using_seq_1-solution}
 seq(30, 40, 2)
 ```
 
-```{r vector_using_seq_1-code-check}
+```{r 04_vector_using_seq_1-code-check}
 grade_code()
 ```
 
@@ -161,32 +168,32 @@ seq(40,30, -2)
 
 (The solution isn't available in this sandbox.  The error message has the information you need to correct the error.  Just think about it carefully...)
 
-```{r vector_using_seq_2, exercise=TRUE, exercise.reveal_solution=FALSE}
+```{r 05_vector_using_seq_2, exercise=TRUE, exercise.reveal_solution=FALSE}
 seq(40, 30, 2)
 ```
 
-```{r vector_using_seq_2-solution}
+```{r 05_vector_using_seq_2-solution}
 seq(40, 30, -2)
 ```
 
-```{r vector_using_seq_2-code-check}
+```{r 05_vector_using_seq_2-code-check}
 grade_code()
 ```
 
 What about fractional increments? 
 
-- call `seq()` with `from = 20`, `to = 30`, and `by = 2.2`.  Pay special attention to the final number in the resulting sequence.
+- call `seq()` with `from = 30`, `to = 40`, and `by = 2.2`.  Pay special attention to the final number in the resulting sequence.
 
 ```{r}
 seq(30, 40, 2.2)
 ```
 
-```{r seq_quiz}
+```{r 06_seq_quiz}
 quiz(
   question("Why is the final value of the last sequence 38.8 instead of 40?",
     answer("Because the difference between 40 and 38.8 is less than 2.2"),
     answer("Because 10 divided by 2.2 is not a whole number"),
-    answer("Because 2.2 times 6 is greater than 40"),
+    answer("Because 2.2 times 6 is greater than (40 - 30)"),
     answer("All of the above.", correct = TRUE)
   )
 )
@@ -220,15 +227,15 @@ Try it yourself:
 
 - Pass the following parameters to `seq()` in the following order: `by=2`, `to=10`, `from = 0`
 
-```{r pass_explicit_parameters, exercise=TRUE}
+```{r 07_pass_explicit_parameters, exercise=TRUE}
 seq(by = ___, to = ___, from = ___)
 ```
 
-```{r pass_explicit_parameters-solution}
+```{r 07_pass_explicit_parameters-solution}
 seq(by = 2, to = 10, from = 0)
 ```
 
-```{r pass_explicit_parameters-code-check}
+```{r 07_pass_explicit_parameters-code-check}
 grade_code()
 ```
 
@@ -247,15 +254,15 @@ Now you try:
 
 - Create the same sequence as above by calling `seq()`, but pass `by` first (explicitly) and the remaining parameters by order.
 
-```{r pass_mixed_parameters, exercise=TRUE}
+```{r 08_pass_mixed_parameters, exercise=TRUE}
 seq(by = ___, ___, ___)
 ```
 
-```{r pass_mixed_parameters-solution}
+```{r 08_pass_mixed_parameters-solution}
 seq(by = 2, 0, 10)
 ```
 
-```{r pass_mixed_parameters-code-check}
+```{r 08_pass_mixed_parameters-code-check}
 grade_code()
 ```
 
@@ -267,15 +274,15 @@ Using the console, open the help for `seq()`.  Find the parameter that controls 
 
 - Use `seq()` create a sequence of length `10` starting at `15.23` and ending a `30.24`; to do this, you'll have to pass `10` explicitly to the length parameter that you identified in help.
 
-```{r fixed_length_seq, exercise=TRUE}
+```{r 09_fixed_length_seq, exercise=TRUE}
 
 ```
 
-```{r fixed_length_seq-solution}
+```{r 09_fixed_length_seq-solution}
 seq(15.23, 30.24, length.out = 10)
 ```
 
-```{r fixed_length_seq-code-check}
+```{r 09_fixed_length_seq-code-check}
 grade_code()
 ```
 
@@ -287,15 +294,15 @@ Look at the help for `rep()`.   Then:
 
 - Create a vector were the value 10 is repeated 20 times
 
-```{r rep_a_value, exercise=TRUE}
+```{r 10_rep_a_value, exercise=TRUE}
 
 ```
 
-```{r rep_a_value-solution}
+```{r 10_rep_a_value-solution}
 rep(10, 20)
 ```
 
-```{r rep_a_value-code-check}
+```{r 10_rep_a_value-code-check}
 grade_code()
 ```
 
@@ -306,15 +313,15 @@ Now, using `rep()` and `:`
 rep(1:5, 3)
 ```
 
-```{r rep_and_colon, exercise=TRUE}
+```{r 11_rep_and_colon, exercise=TRUE}
 
 ```
 
-```{r rep_and_colon-solution}
+```{r 11_rep_and_colon-solution}
 rep(1:5, 3)
 ```
 
-```{r rep_and_colon-code-check}
+```{r 11_rep_and_colon-code-check}
 grade_code()
 ```
 
@@ -325,15 +332,15 @@ Now, using `rep()` and `c()`
 rep(c(5,9,2), 4)
 ```
 
-```{r rep_and_c, exercise=TRUE, exercise.reveal_solution=FALSE}
+```{r 12_rep_and_c, exercise=TRUE, exercise.reveal_solution=FALSE}
 
 ```
 
-```{r rep_and_c-solution}
+```{r 12_rep_and_c-solution}
 rep(c(5,9,2), 4)
 ```
 
-```{r rep_and_c-code-check}
+```{r 12_rep_and_c-code-check}
 grade_code()
 ```
 
@@ -350,16 +357,16 @@ In the sandbox below:
 - draw 5 letters, at random, from the `letters` vector; assign the result to the name `some_letters`
 - display `some_letters`
 
-```{r sample_letters, exercise=TRUE}
+```{r 13_sample_letters, exercise=TRUE}
 
 ```
 
-```{r sample_letters-solution}
+```{r 13_sample_letters-solution}
 some_letters <- sample(letters, 5)
 some_letters
 ```
 
-```{r sample_letters-code-check}
+```{r 13_sample_letters-code-check}
 grade_code()
 ```
 
@@ -370,16 +377,16 @@ Read the help for `rnorm()` and in the sandbox below:
 - create a vector of 10000 random numbers drawn from a normal distribution with a mean of 3 and a standard deviation of 6; assign the vector to the name `random_normal`
 - create a histogram of the vector by passing `random_normal` to a function called `hist()`.
 
-```{r sample_normal, exercise=TRUE}
+```{r 14_sample_normal, exercise=TRUE}
 
 ```
 
-```{r sample_normal-solution}
+```{r 14_sample_normal-solution}
 random_normal <- rnorm(10000, mean = 3, sd = 6)
 hist(random_normal)
 ```
 
-```{r sample_normal-code-check}
+```{r 14_sample_normal-code-check}
 grade_code()
 ```
 
@@ -401,33 +408,35 @@ Now you try.
 
 - Use indexing to extract the every other letter of the alphabet from `letters`, starting with the letter "b":
 
-```{r every_other_letter, exercise=TRUE}
+```{r 15_every_other_letter, exercise=TRUE}
 
 ```
 
-```{r every_other_letter-solution}
+```{r 15_every_other_letter-solution}
 letters[seq(2,26, 2)]
 ```
 
-```{r every_other_letter-code-check}
+```{r 15_every_other_letter-code-check}
 grade_code()
 ```
 
 Remember, square brackets are not like parentheses.  You can't enter multiple values separated by commas.  You need to use place a vector inside the square brackets.  
 
-Try running the following code.  You will get an error.  Then:
+Try running the following code.  You will get an error.  Does the error make sense?
 
-- Fix the code so that it returns the 13th, 19th, and 21st letter of the alphabet. 
+Now:
 
-```{r index_MSU, exercise=TRUE}
-LETTERS[13, 29, 21]
+- Fix the code so that it returns the 13th, 19th, and 21st letter of the alphabet.
+
+```{r 16_index_MSU, exercise=TRUE}
+LETTERS[13, 19, 21]
 ```
 
-```{r index_MSU-solution}
+```{r 16_index_MSU-solution}
 LETTERS[c(13, 19, 21)]
 ```
 
-```{r index_MSU-code-check}
+```{r 16_index_MSU-code-check}
 grade_code()
 ```
 
@@ -435,33 +444,33 @@ Indexes don't have to be an ascending order.
 
 - What happens when you index `letters` using all of the integers starting at 26 and descending down to 1?
 
-```{r reverse_letters, exercise=TRUE}
+```{r 17_reverse_letters, exercise=TRUE}
 
 ```
 
-```{r reverse_letters-solution}
+```{r 17_reverse_letters-solution}
 letters[26:1]
 ```
 
-```{r reverse_letters-code-check}
+```{r 17_reverse_letters-code-check}
 grade_code()
 ```
 
 - What secret message you get when you pull the following positions from `letters` - c(4,15,14,20,23,15,18,18,25,2,5,8,1,16,16,25)
 
-```{r be_happy, exercise=TRUE}
+```{r 18_be_happy, exercise=TRUE}
 
 ```
 
-```{r be_happy-solution}
+```{r 18_be_happy-solution}
 letters[c(4,15,14,20,23,15,18,18,25,2,5,8,1,16,16,25)]
 ```
 
-```{r be_happy-code-check}
+```{r 18_be_happy-code-check}
 grade_code()
 ```
 
-### Those pesky bracketed number
+### Those pesky bracketed numbers
 
 Now that you know what indexing is, we're ready to talk about those pesky bracketed numbers that show up when you print a vector.  The numbers are the index values -- the position of values in the vector.
 
@@ -494,18 +503,18 @@ Another way to index something in R is to use a vector of logical values.  One w
 - is greater than or eqaul to: `>=`
 - is not equal to: `!=`
 
-In the sandbox below, I've provided code that will create a vector of 5 random numbers, assign it to the name `random_vals` and then display the values.  Add code to:
+In the sandbox below, I've provided code that will create a vector of 5 random numbers, assign it to the name `random_values` and then display the values.  Add code to:
 
-- create a logical vector showing which values are less than 0.5 and assign the vector to the name `is_less_than_half`
+- create a logical vector that contains TRUE for values that are less than 0.5 and FALSE for other values. Assign the logical vector to the name `is_less_than_half`
 - display the logical vector
 - index `random_values` using the logical vector (i.e., enter `random_value[is_less_than_half]`)
 
-```{r is_less_than_half, exercise=TRUE}
+```{r 19_is_less_than_half, exercise=TRUE}
 random_values <- runif(5)
 random_values
 ```
 
-```{r is_less_than_half-solution}
+```{r 19_is_less_than_half-solution}
 random_values <- runif(5)
 random_values
 is_less_than_half <- random_values < 0.5
@@ -513,7 +522,7 @@ is_less_than_half
 random_values[is_less_than_half]
 ```
 
-```{r is_less_than_half-code-check}
+```{r 19_is_less_than_half-code-check}
 grade_code()
 ```
 
@@ -521,7 +530,7 @@ Once you have the code correct and have submitted it, continue to run the code s
 
 When you index a vector using logical values (in this case, by typing `random_values[is_less_than_half]`), R selects out all of the values from the vector (`random_values`) where the index (`is_less_than_half`) is `TRUE`.  
 
-In other words, R selects all of the values from `random_value` that are less than 0.5!!
+In other words, every time you run the code, `random_values` takes on a different set of random numbers.  But regardless of what numbers are contained in `random_vales`, R selects all of the numbers from `random_value` that are less than 0.5!!
 
 
 ## Value names
@@ -560,18 +569,18 @@ In the sandbox below:
 - Use the `names()` function with the assignment operator to set the value names in  `letter_order` equal to the `letters` vector.
 - Display `letter_order` again.
 
-```{r letter_order, exercise=TRUE}
+```{r 20_letter_order, exercise=TRUE}
 
 ```
 
-```{r letter_order-solution}
+```{r 20_letter_order-solution}
 letter_order <- 1:26
 letter_order
 names(letter_order) <- letters
 letter_order
 ```
 
-```{r letter_order-code-check}
+```{r 20_letter_order-code-check}
 grade_code()
 ```
 
@@ -583,18 +592,18 @@ The most important use of value names is indexing.  If you name the values, it's
 - Using `student_names`, the `names()` function, and the assignment operator `<-`, add value names to the `student_grades` vector.
 - Display the named vector
 
-```{r student_grades, exercise=TRUE}
+```{r 21_student_grades, exercise=TRUE}
 student_grades <- c(89.2, 70.0, 88.2, 99.6, 62.1)
 ```
 
-```{r student_grades-solution}
+```{r 21_student_grades-solution}
 student_grades <- c(89.2, 70.0, 88.2, 99.6, 62.1)
 student_names <- c("Anna", "Bently", "Chloe", "Douglas", "Ellen")
 names(student_grades) <- student_names
 student_grades
 ```
 
-```{r student_grades-code-check}
+```{r 21_student_grades-code-check}
 grade_code()
 ```
 OK, now I've told you that you can index with value names.  
@@ -604,46 +613,46 @@ OK, now I've told you that you can index with value names.
 
 (Note that you don't have to create student_grades again.  It's ready for use in the sandbox below.)
 
-```{r student_grades_index-setup}
+```{r 22_student_grades_index-setup}
 student_grades <- c(89.2, 70, 88.2, 99.6, 62.1)
 student_names <- c("Anna", "Bently", "Chloe", "Douglas", "Ellen")
 names(student_grades) <- student_names
 ```
 
-```{r student_grades_index, exercise=TRUE}
+```{r 22_student_grades_index, exercise=TRUE}
 
 ```
 
-```{r student_grades_index-solution}
+```{r 22_student_grades_index-solution}
 grade_bently <- student_grades["Bently"]
 grade_bently
 ```
 
-```{r student_grades_index-code-check}
+```{r 22_student_grades_index-code-check}
 grade_code()
 ```
 
 - Try indexing `student_grades` with the value `"bently"` (note the lower case `b`)? (In this case, don't assign the result to a name... just let R display the result)
 
-```{r grades_index_lower_case-setup}
+```{r 23_grades_index_lower_case-setup}
 student_grades <- c(89.2, 70, 88.2, 99.6, 62.1)
 student_names <- c("Anna", "Bently", "Chloe", "Douglas", "Ellen")
 names(student_grades) <- student_names
 ```
 
-```{r grades_index_lower_case, exercise=TRUE}
+```{r 23_grades_index_lower_case, exercise=TRUE}
 
 ```
 
-```{r grades_index_lower_case-solution}
-student_grades["bentley"]
+```{r 23_grades_index_lower_case-solution}
+student_grades["bently"]
 ```
 
-```{r grades_index_lower_case-code-check}
+```{r 23_grades_index_lower_case-code-check}
 grade_code()
 ```
 
-```{r bently_quiz}
+```{r 24_bently_quiz}
 quiz(
   question("What value did indexing with `bently` return?",
     answer("70.0"),
@@ -656,21 +665,21 @@ quiz(
 
 - Can you extract the grades for both Chole and Ellen using indexing?
 
-```{r grades_index_two_names-setup}
+```{r 25_grades_index_two_names-setup}
 student_grades <- c(89.2, 70, 88.2, 99.6, 62.1)
 student_names <- c("Anna", "Bently", "Chloe", "Douglas", "Ellen")
 names(student_grades) <- student_names
 ```
 
-```{r grades_index_two_names, exercise=TRUE}
+```{r 25_grades_index_two_names, exercise=TRUE}
 
 ```
 
-```{r grades_index_two_names-solution}
+```{r 25_grades_index_two_names-solution}
 student_grades[c("Chloe", "Ellen")]
 ```
 
-```{r grades_index_two_names-code-check}
+```{r 25_grades_index_two_names-code-check}
 grade_code()
 ```
 
@@ -680,7 +689,7 @@ The `names()` function can also be used to retrieve the names from a vector.  I'
 - See if you can retrive the names from `more_student_grades` and assign those names to `more_student_names`
 - Display the vector associated with `more_student_names`.
 
-```{r more_student_names-setup}
+```{r 26_more_student_names-setup}
 dummy <- set.seed(330330)
 more_student_grades <- 
   structure(
@@ -694,25 +703,25 @@ more_student_grades <-
     ))
 ```
 
-```{r more_student_names, exercise=TRUE}
+```{r 26_more_student_names, exercise=TRUE}
 
 ```
 
-```{r more_student_names-solution}
+```{r 26_more_student_names-solution}
 more_student_grades
 more_student_names <- names(more_student_grades)
 more_student_names
 ```
 
-```{r more_student_names-code-check}
+```{r 26_more_student_names-code-check}
 grade_code()
 ```
 
-The `class()` funciton shows us the class of a vector (or other R object). In the following sandbox:
+The `class()` function shows us the class of a vector (or other R object). In the following sandbox:
 
 - pass `more_student_grades` to the `class()` function and see what happens.
 
-```{r more_student_grades_class-setup}
+```{r 27_more_student_grades_class-setup}
 dummy <- set.seed(330330)
 more_student_grades <- 
   structure(
@@ -727,15 +736,15 @@ more_student_grades <-
 more_student_names <- names(more_student_grades)
 ```
 
-```{r more_student_grades_class, exercise=TRUE}
+```{r 27_more_student_grades_class, exercise=TRUE}
 
 ```
 
-```{r more_student_grades_class-solution}
+```{r 27_more_student_grades_class-solution}
 class(more_student_grades)
 ```
 
-```{r more_student_grades_class-code-check}
+```{r 27_more_student_grades_class-code-check}
 grade_code()
 ```
 
@@ -743,7 +752,7 @@ Now try with `more_student_names`
 
 - pass `more_student_names` to the `class()` function.
 
-```{r more_student_names_class-setup}
+```{r 28_more_student_names_class-setup}
 dummy <- set.seed(330330)
 more_student_grades <- 
   structure(
@@ -758,19 +767,19 @@ more_student_grades <-
 more_student_names <- names(more_student_grades)
 ```
 
-```{r more_student_names_class, exercise=TRUE}
+```{r 28_more_student_names_class, exercise=TRUE}
 
 ```
 
-```{r more_student_names_class-solution}
+```{r 28_more_student_names_class-solution}
 class(more_student_names)
 ```
 
-```{r more_student_names_class-code-check}
+```{r 28_more_student_names_class-code-check}
 grade_code()
 ```
 
-```{r data_type_quiz}
+```{r 29_data_type_quiz}
 quiz(
   question("The class of `more_student_grades` is `numeric`.  It's associated names are:",
     answer("logical data"),
@@ -799,7 +808,7 @@ You can use `<`, `>`, `<=`, and `>=` to compare character strings by alphabetica
 
 - Can you display a logical vector that has `TRUE` anywhere the student name associated with the values in `more_student_grades` comes before the letter "E" in the alphabet?
 
-```{r names_before_e-setup}
+```{r 30_names_before_e-setup}
 dummy <- set.seed(330330)
 more_student_grades <- 
   structure(
@@ -814,15 +823,15 @@ more_student_grades <-
 more_student_names <- names(more_student_grades)
 ```
 
-```{r names_before_e, exercise=TRUE}
+```{r 30_names_before_e, exercise=TRUE}
 
 ```
 
-```{r names_before_e-solution}
+```{r 30_names_before_e-solution}
 names(more_student_grades) < "E"
 ```
 
-```{r names_before_e-code-check}
+```{r 30_names_before_e-code-check}
 grade_code()
 ```
 
@@ -838,7 +847,7 @@ Let's say you are teaching a course and your section of the course has all of th
 - Display `my_student_grades`
 - Use `mean()` to display the average of grades in your section.
 
-```{r grades_for_A_to_M-setup}
+```{r 31_grades_for_A_to_M-setup}
 dummy <- set.seed(330330)
 more_student_grades <- 
   structure(
@@ -853,16 +862,16 @@ more_student_grades <-
 more_student_names <- names(more_student_grades)
 ```
 
-```{r grades_for_A_to_M, exercise=TRUE}
+```{r 31_grades_for_A_to_M, exercise=TRUE}
 
 ```
 
-```{r grades_for_A_to_M-solution}
+```{r 31_grades_for_A_to_M-solution}
 my_student_grades <- more_student_grades[names(more_student_grades) < "N"]
 mean(my_student_grades)
 ```
 
-```{r grades_for_A_to_M-code-check}
+```{r 31_grades_for_A_to_M-code-check}
 grade_code()
 ```
 
@@ -878,17 +887,17 @@ For instance, what happens when you:
 - Create another vector of integers from 1 to 10 and assign it to the name `one_to_ten_b`;
 - Use the addition operator to add `one_to_ten_a` and `one_to_ten_b`.
 
-```{r vector_math_1, exercise=TRUE}
+```{r 32_vector_math_1, exercise=TRUE}
 
 ```
 
-```{r vector_math_1-solution}
+```{r 32_vector_math_1-solution}
 one_to_ten_a <- 1:10
 one_to_ten_b <- 1:10
 one_to_ten_a + one_to_ten_b
 ```
 
-```{r vector_math_1-code-check}
+```{r 32_vector_math_1-code-check}
 grade_code()
 ```
 
@@ -899,23 +908,23 @@ As you can see, when you add two vectors together, the first values get added, t
 - subtract one_to_ten_b from one_to_ten_a
 - raise one_to_ten_a to the power of one_to_ten_b
 
-```{r vector_math_2-setup}
+```{r 33_vector_math_2-setup}
 one_to_ten_a <- 1:10
 one_to_ten_b <- 1:10
 ```
 
-```{r vector_math_2, exercise=TRUE}
+```{r 33_vector_math_2, exercise=TRUE}
 
 ```
 
-```{r vector_math_2-solution}
+```{r 33_vector_math_2-solution}
 one_to_ten_a * one_to_ten_b
 one_to_ten_a / one_to_ten_b
 one_to_ten_a - one_to_ten_b
 one_to_ten_a^one_to_ten_b
 ```
 
-```{r vector_math_2-code-check}
+```{r 33_vector_math_2-code-check}
 grade_code()
 ```
 
@@ -925,20 +934,20 @@ What happens when one vector is shorter that the other?  Let's find out:
 
 - Add `one_to_ten_a` and `c(1,2)`
 
-```{r recycling_1-setup}
+```{r 34_recycling_1-setup}
 one_to_ten_a <- 1:10
 one_to_ten_b <- 1:10
 ```
 
-```{r recycling_1, exercise=TRUE}
+```{r 34_recycling_1, exercise=TRUE}
 
 ```
 
-```{r recycling_1-solution}
+```{r 34_recycling_1-solution}
 one_to_ten_a + c(1,2)
 ```
 
-```{r recycling_1-code-check}
+```{r 34_recycling_1-code-check}
 grade_code()
 ```
 
@@ -960,20 +969,20 @@ Try again, only this time:
 
 - Add `one_to_ten_a` and `1:4`
 
-```{r recycling_2-setup}
+```{r 35_recycling_2-setup}
 one_to_ten_a <- 1:10
 one_to_ten_b <- 1:10
 ```
 
-```{r recycling_2, exercise=TRUE}
+```{r 35_recycling_2, exercise=TRUE}
 
 ```
 
-```{r recycling_2-solution}
+```{r 35_recycling_2-solution}
 one_to_ten_a + 1:4
 ```
 
-```{r recycling_2-code-check}
+```{r 35_recycling_2-code-check}
 grade_code()
 ```
 
@@ -1002,7 +1011,7 @@ one_to_ten_a <- 1:10
 one_to_ten_a + 20
 ```
 
-Yes, `10` creates a vector of length 1:
+Yes, `20` creates a vector of length 1:
 
 ```{r, echo=TRUE}
 length(20)
@@ -1014,6 +1023,7 @@ In your lab this week, you'll find a situation where recycling makes life easier
 
 ### Whew!
 
-Wow.  That's a lot of learning packed into one tutorial!  Congratulations on finishing!  If you feel like you can't retain it all, don't worry.  You'll get to opportunity to revisit and apply these ideas many, many times before the course is over!  For now, just relax and turn in your homework using `ENSC311::submit_ENSC311()`.  When you do so, look carefully at the list of options to turn in.  They will be in alphabeticaly not chronilogical order... 
+Wow.  That's a lot of learning packed into one tutorial!  Congratulations on finishing!  If you feel like you can't retain it all, don't worry to much.  You'll get to opportunity to revisit and apply these ideas many times before the course is over!  
 
-Be sure to choose the number corresponding to the homework for Lecture 7! 
+
+

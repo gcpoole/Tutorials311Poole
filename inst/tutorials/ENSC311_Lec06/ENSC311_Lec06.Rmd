@@ -13,7 +13,6 @@ description: "Introducting the basics of literals, functions, names, and vectors
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(learnr)
-library(palmerpenguins)
 library(ENSC311)
 gradethis::gradethis_setup()
 options(tutorial.event_recorder = tutorialize::mongo_recorder)
@@ -589,7 +588,7 @@ y <- x^2
 y
 ```
 
-but using the name `root` and `squared_root` gave an indication of the value the name were associated with.  When your code gets complex or after you've left it for a while and come back to it, names like `x` and `y` are not helpful for being able to read your code and understadn the role of each variable therein.
+but using the name `root` and `squared_root` gave an indication of the value the name were associated with.  When your code gets complex or after you've left it for a while and come back to it, names like `x` and `y` are not helpful for being able to read your code and understand the role of each variable therein.
 
 By a common convention, names in R are generally built from lower case letters, with the underscore character "_" used to separate words in multi-word names.  "height", "age", or "intercity_distance" are examples of useful and descriptive names that conform to the convention.
 
