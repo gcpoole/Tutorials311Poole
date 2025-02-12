@@ -14,8 +14,15 @@ description: "An introduction to data.frames -- indexing (subsetting) tabular da
 knitr::opts_chunk$set(echo = FALSE)
 library(learnr)
 gradethis::gradethis_setup()
-options(tutorial.event_recorder = tutorialize::recorder)
+options(tutorial.event_recorder = tutorialize::mongo_recorder)
 options(tutorial.storage = learnr::filesystem_storage(file.path(path.expand("~"), "_learnr_storage_")))
+
+options(tutorial.events_collection = 
+  mongolite::mongo(
+    db = "tutorial",
+    collection = "events",
+    url = persistR::getPersistent("db_key", "~/R/persistR")))
+
 ```
 
 ## R Objects: A review
@@ -58,10 +65,6 @@ For instance, the `+` operator is designed to work on `numeric` vectors.  Theref
 
 So, if an `atomic` vector is an ordered collection of values, what is a `list` vector? Well, as `list` vector (which is usually just called a `list`) is an ordered collection of `objects`.  
 
-Here is how a `list` fits into the object hierarchy:
-
-
-
 A useful analogy for a `list` is a line of cubbyholes.  The line of cubbyholes is itself a single object, but you can put any type object in each cubbyhole! 
 
 Try making a list below.  We'll use the `list` function to create a list of length 3 (analogous to a line of three cubbyholes).  
@@ -79,7 +82,7 @@ Don't forget to display the list!
 my_list <- list(letters, 1:10, sum)
 ```
 
-```{r make_a_list, exercise=tutorialize}
+```{r 01_make_a_list, exercise=tutorialize}
 #+ my_list <- list(___, ___, ___)
 my_list <- list(letters, 1:10, sum)
 my_list
@@ -89,7 +92,7 @@ The last item in the list might look a little strange.  But in the sandbox below
 
 - display the `sum` function and see if it doesn't look like the last item in `my_list`!
 
-```{r display_sum, exercise=tutorialize}
+```{r 02_display_sum, exercise=tutorialize}
 sum
 ```
 
@@ -122,7 +125,7 @@ So earlier in the tutorial we created `my_list`.
 
 - Remind yourself what is in `my_list` by displaying it
 
-```{r display_my_list, exercise=tutorialize, exercise.setup=make_a_list}
+```{r 03_display_my_list, exercise=tutorialize, exercise.setup=01_make_a_list}
 my_list
 ```
 
@@ -132,7 +135,7 @@ OK.  Now, using your knowlege of indexing `atomic` vectors:
 - display `my_short_list`
 - prove to yourself that `my_short_list` is a list (hint: try `?is.list` in the console).
 
-```{r shorten_my_list, exercise=tutorialize, exercise.setup=make_a_list}
+```{r 04_shorten_my_list, exercise=tutorialize, exercise.setup=01_make_a_list}
 my_short_list <- my_list[c(1,3)]
 my_short_list
 is.list(my_short_list)
@@ -146,7 +149,7 @@ Try the following:
 - display `length_1_list`
 - prove to yourself that `length_1_list` is a list.
 
-```{r length_1_list, exercise=tutorialize, exercise.setup=make_a_list}
+```{r 05_length_1_list, exercise=tutorialize, exercise.setup=01_make_a_list}
 length_1_list <- my_list[2]
 length_1_list
 is.list(length_1_list)
@@ -156,18 +159,18 @@ In the sandbox below:
 
 - Try to sum the values in `length_1_list` by passing `length_1_list` to the `sum` function (you can't submit the answer for a reason...)
 
-```{r cant_sum_a_list-setup}
+```{r 06_cant_sum_a_list-setup}
 my_list <- list(letters, 1:10, sum)
 length_1_list <- my_list[2]
 ```
 
-```{r cant_sum_a_list, exercise=TRUE}
+```{r 06_cant_sum_a_list, exercise=TRUE}
 
 ```
 
 So what gives?  Why doesn't `sum` work?
 
-```{r, sum_a_list_quiz}
+```{r, 07_sum_a_list_quiz}
 quiz(
   question(
     "Why can't you sum the values in `length_1_list` by passing it to the `sum` function?",
@@ -207,7 +210,7 @@ Extraction, on the other hand, retrieves the *contents* of one cubbyhole!  In th
 - Have R display the length of `my_integer_vector`.
 - Sum the values in `my_integer_vector`
 
-```{r extract_integer_vector, exercise=tutorialize, exercise.setup=make_a_list}
+```{r 08_extract_integer_vector, exercise=tutorialize, exercise.setup=01_make_a_list}
 #+ # Note the double brackets...
 #+ my_integer_vector <- my_list[[2]]
 # Note the double brackets...
@@ -232,7 +235,7 @@ Remember, the extraction operator `[[` will pull the `integer` vector out of the
 
 - modify `my_list[2]` in the sample line of code slightly so that `identical` returns `TRUE`
 
-```{r try_extraction, exercise=tutorialize, exercise.setup=make_a_list}
+```{r 09_try_extraction, exercise=tutorialize, exercise.setup=01_make_a_list}
 #+ identical(1:10, my_list[2])
 identical(1:10, my_list[[2]])
 ```
@@ -249,7 +252,7 @@ Just like each value in an `atomic` vector can be assigned a name, the items in 
 names(my_list) <- c("letters", "integers", "sum_function")
 ```
 
-```{r name_my_list, exercise=tutorialize, exercise.setup=make_a_list}
+```{r 10_name_my_list, exercise=tutorialize, exercise.setup=01_make_a_list}
 names(my_list) <- c("letters", "integers", "sum_function")
 my_list
 ```
@@ -273,7 +276,7 @@ In the sandbox below:
 - change the code so that the names "letters", "integers", and "sum_function" are included in `my_list` at the time the `list` is created.
 - display `my_list`
 
-```{r name_when_creating_list, exercise=tutorialize}
+```{r 11_name_when_creating_list, exercise=tutorialize}
 #+ my_list <- list(letters, 1:10, sum)
 my_list <- list(letters = letters, integers = 1:10, sum_function = sum)
 my_list
@@ -285,7 +288,7 @@ In the sandbox below:
 - then *index* the `integer` vector from `my_list`, again using a name rather than a position (the result should be a `list` of length = 1 containing `1:10`)
 - then see if you can *extract* the `integer` vector from `my_list` using names rather than position.  The result should be an `integer` vector of length = 10.
 
-```{r index_extract_by_name, exercise=tutorialize, exercise.setup=name_my_list}
+```{r 12_index_extract_by_name, exercise=tutorialize, exercise.setup=10_name_my_list}
 my_list[c("letters", "sum_function")]
 my_list["integers"]
 my_list[["integers"]]
@@ -309,7 +312,7 @@ In the sandbox below:
 
 - extract the "integers" vector from `my_list` using first the `$` operator and then again using the `[[` operator; show the results are identical
 
-```{r dollar_vs_double_square, exercise=tutorialize, exercise.setup=name_my_list}
+```{r 13_dollar_vs_double_square, exercise=tutorialize, exercise.setup=10_name_my_list}
 identical(my_list$integers, my_list[["integers"]])
 ```
 
@@ -320,7 +323,7 @@ bob <- my_list$sum_function
 bob(my_list[["integers"]])
 ```
 
-```{r extract_function_quiz}
+```{r 14_extract_function_quiz}
 quiz(
   question(
     "Why did the code above result in the value `55`?",
@@ -373,7 +376,7 @@ The `str()` function provides a useful summary of the structure of a data.frame.
 
 - pass `mtcars` to the `str()` function
 
-```{r str_mtcars, exercise=tutorialize}
+```{r 15_str_mtcars, exercise=tutorialize}
 str(mtcars)
 ```
 
@@ -382,7 +385,7 @@ The `head()` function shows the first few values of any item.  In the sandbox be
 - pass `letters` to the `head()` function;
 - pass `mtcars` to the `head()` function.
 
-```{r head_letters_mtcars, exercise=tutorialize}
+```{r 16_head_letters_mtcars, exercise=tutorialize}
 head(letters)
 head(mtcars)
 ```
@@ -392,7 +395,7 @@ Read the help on the head function.  Now, in the sandbox below:
 - use `head()` to display the first 10 letters of the alphabet;
 - use `head()` to display the forst 10 rows of `mtcars`.
 
-```{r head_letters_mtcars_10, exercise=tutorialize}
+```{r 17_head_letters_mtcars_10, exercise=tutorialize}
 head(letters, 10)
 head(mtcars, 10)
 ```
@@ -402,7 +405,7 @@ head(mtcars, 10)
 - display the number of rows in `mtcars`
 - display the number columns
 
-```{r nrow_ncol, exercise=tutorialize}
+```{r 18_nrow_ncol, exercise=tutorialize}
 nrow(mtcars)
 ncol(mtcars)
 ```
@@ -425,7 +428,7 @@ In the sandbox below:
 
 - Prove that `mtcars` is a `list`
 
-```{r df_is_list, exercise=tutorialize}
+```{r 19_df_is_list, exercise=tutorialize}
 is.list(mtcars)
 ```
 
@@ -434,7 +437,7 @@ So, if a `data.frame` is a `list` of `vectors` that each represent columns, then
 - Use `names()` to get the names of the items in `mtcars`
 - Then use `str()` to view the structure of `mtcars` again.
 
-```{r names_of_mtcars, exercise=tutorialize}
+```{r 20_names_of_mtcars, exercise=tutorialize}
 names(mtcars)
 str(mtcars)
 ```
@@ -446,7 +449,7 @@ How about the length of the `list`?
 - Display the length of `mtcars` using `length()`
 - Display the number of columns useing `ncol()`
 
-```{r length_vs_ncol, exercise=tutorialize}
+```{r 21_length_vs_ncol, exercise=tutorialize}
 length(mtcars)
 ncol(mtcars)
 ```
@@ -464,7 +467,7 @@ If `mtcars` is a list of columns, then you should be able to extract columns.  T
 - display `col_6`
 - show that `col_6` is a vector
 
-```{r extract_columns, exercise=tutorialize}
+```{r 22_extract_columns, exercise=tutorialize}
 mpg_col <- mtcars$mpg
 mpg_col
 is.vector(mpg_col)
@@ -481,7 +484,7 @@ How long are the column vectors?
 - display the length of the `col_6` vector
 - display the number of rows in `mtcars`
 
-```{r col_length_vs_nrows, exercise=tutorialize, exercise.setup=extract_columns}
+```{r 23_col_length_vs_nrows, exercise=tutorialize, exercise.setup=22_extract_columns}
 length(mpg_col)
 length(col_6)
 nrow(mtcars)
@@ -499,7 +502,7 @@ Try these:
 - display the range in fuel economy for the cars in `mtcars` (hint: `?range`)
 - display a vector different number of cylinders that the cars might have (hint: `?unique`) 
 
-```{r mean_disp, exercise=tutorialize}
+```{r 24_mean_disp, exercise=tutorialize}
 mean(mtcars$disp)
 range(mtcars$mpg)
 unique(mtcars$cyl)
@@ -512,7 +515,7 @@ unique(mtcars$cyl)
 - use `[` to subset mtcars.  Include columns 1, 4, and 6.  Assign the result to `three_column_mtcars`.
 - display the first four rows of `three_column_mtcars`
 
-```{r index_mtcars_as_list_1, exercise=tutorialize}
+```{r 25_index_mtcars_as_list_1, exercise=tutorialize}
 three_column_mtcars <- mtcars[c(1,4,6)]
 head(three_column_mtcars, 4)
 ```
@@ -523,7 +526,7 @@ Try again:
 - display the first *five* rows of `three_column_mtcars`
 
 
-```{r index_mtcars_as_list_2, exercise=tutorialize}
+```{r 26_index_mtcars_as_list_2, exercise=tutorialize}
 three_column_mtcars <- mtcars[c("mpg", "hp", "wt")]
 head(three_column_mtcars, 5)
 ```
@@ -534,7 +537,7 @@ One more time:
 - display the first *three* rows of `three_column_mtcars`
 
 
-```{r index_mtcars_as_list_3, exercise=tutorialize}
+```{r 27_index_mtcars_as_list_3, exercise=tutorialize}
 three_column_mtcars <- 
   mtcars[c(TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE)]
 head(three_column_mtcars, 3)
@@ -560,7 +563,7 @@ Now you try!
 - create a logical vector called `has_poor_fuel_economy` that contains TRUE if a car's fuel economy is less than 15 miles per gallon
 - index the `mtcars` data.frame so the result contains the fuel economy, number of cylinders, horsepower, weight, and number of forward gears for cars with poor fuel economy.
 
-```{r index_mtcars_2D_1, exercise=tutorialize}
+```{r 28_index_mtcars_2D_1, exercise=tutorialize}
 has_poor_fuel_economy <- mtcars$mpg < 15
 mtcars[has_poor_fuel_economy, c("mpg", "cyl", "hp", "wt", "gear")]
 ```
@@ -575,7 +578,7 @@ You try:
 
 - display all of the columns for cars that have poor fuel economy. 
 
-```{r index_mtcars_2D_2, exercise=tutorialize, exercise.setup=index_mtcars_2D_1}
+```{r 29_index_mtcars_2D_2, exercise=tutorialize, exercise.setup=28_index_mtcars_2D_1}
 mtcars[has_poor_fuel_economy, ]
 ```
 
@@ -606,7 +609,7 @@ Try this... You can index the rows of `mtcars` and then use the `$` function to 
 - find the mean displacement for 6 cylinder engines
 - find the mean displacement for 8 cylinder engines
 
-```{r index_then_extract, exercise=tutorialize}
+```{r 30_index_then_extract, exercise=tutorialize}
 mean(mtcars[mtcars$cyl == 4, ]$disp)
 mean(mtcars[mtcars$cyl == 6, ]$disp)
 mean(mtcars[mtcars$cyl == 8, ]$disp)

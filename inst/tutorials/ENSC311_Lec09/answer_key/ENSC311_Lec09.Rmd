@@ -13,8 +13,15 @@ description: "An introduction to packages, environments, and tibbles"
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
 gradethis::gradethis_setup()
-options(tutorial.event_recorder = tutorialize::recorder)
+options(tutorial.event_recorder = tutorialize::mongo_recorder)
 options(tutorial.storage = learnr::filesystem_storage(file.path(path.expand("~"), "_learnr_storage_")))
+
+options(tutorial.events_collection = 
+  mongolite::mongo(
+    db = "tutorial",
+    collection = "events",
+    url = persistR::getPersistent("db_key", "~/R/persistR")))
+
 ```
 
 ## Packages
@@ -41,7 +48,7 @@ Or, you can use the `library()` function to load a package.  If you watch the co
 
 In the sandbox below, 
 
-- try to use the `as_tibble()` function to convert `mtcars` to a `tibble` by entering the command `as_tibble(mtcars)`.  (You can't submit your answer becuase you will encounter an error...)
+- try to use the `as_tibble()` function to convert `mtcars` to a `tibble` by entering the command `as_tibble(mtcars)`.  (You can't submit your answer because you will encounter an error...)
 
 ```{r as_tibble_error, exercise=TRUE}
 
@@ -54,7 +61,7 @@ Why can't you use `as_tibble()`?  Well, the `as_tibble()` function is not part o
 - then, use `as_tibble()` to convert `mtcars` to a tibble; assign the result to `mtcars_tib`.
 - display the class of `mtcars_tib`
 
-```{r as_tibble_mtcars, exercise=tutorialize}
+```{r 01_as_tibble_mtcars, exercise=tutorialize}
 class(mtcars)
 library(tibble)
 mtcars_tib <- as_tibble(mtcars)
@@ -76,7 +83,7 @@ The `as_tibble` function is also found in the `dplyr` package.  In the sandbox b
 - use the `::` operator to call the `as_tibble()` function from the `dplyr` package and pass `mtcars` into the function.  Assign the result to `mtcars_tib` again.
 - display the class of `mtcars_tib`
 
-```{r as_tibble_mtcars_dplyr, exercise=tutorialize}
+```{r 02_as_tibble_mtcars_dplyr, exercise=tutorialize}
 mtcars_tib <- dplyr::as_tibble(mtcars)
 class(mtcars_tib)
 ```
@@ -92,11 +99,11 @@ We already examined the first difference in the prior tutorial.  If you *index* 
 - using two-dimensional indexing, extract all rows but just the "mpg" column from `mtcars`
 - then, do the exact same thing using `mtcars_tib`
 
-```{r single_column_index-setup}
+```{r 03_single_column_index-setup}
 mtcars_tib <- tibble::as_tibble(mtcars)
 ```
 
-```{r single_column_index, exercise=tutorialize}
+```{r 03_single_column_index, exercise=tutorialize}
 mtcars[ , "mpg"]
 mtcars_tib[ , "mpg"]
 ```
@@ -127,12 +134,12 @@ So in the sandbox below:
 
 Be sure to run your code before you submit it...
 
-```{r override_c_and_letters-setup}
+```{r 04_override_c_and_letters-setup}
 c <- function(...) "I'm sorry. I won't build that vector. You didn't say please."
 letters <- "You're out of luck.  The alphabet is on strike!"
 ```
 
-```{r override_c_and_letters, exercise=tutorialize}
+```{r 04_override_c_and_letters, exercise=tutorialize}
 c(10,20,30)
 letters
 ```
@@ -144,7 +151,7 @@ Hmmm.  Try again.  Let's be more specific.
 - Make a `vector` containing 10, 20, and 30 using `c()`, but this time specifically call `c` from the `base` package using the `::` operator.
 - Similarly, display `letters` from the `base` package using the `::` operator.
 
-```{r override_c_and_letters_base, exercise=tutorialize, exercise.setup=override_c_and_letters}
+```{r 05_override_c_and_letters_base, exercise=tutorialize, exercise.setup=04_override_c_and_letters}
 base::c(10,20,30)
 base::letters
 ```
@@ -245,7 +252,7 @@ In the sandbox below:
 
 Hint: When you write a `function` that accepts `...` as a parameter, you can simply pass `...` to another `function` from within the body of your `function`.
 
-```{r excited_sum, exercise=tutorialize}
+```{r 06_excited_sum, exercise=tutorialize}
 sum <- function(...) {
   print("This is so exciting!!")
   return(base::sum(...))
@@ -258,7 +265,7 @@ Now your excited `sum()` function is in this tutorial's environment, which is on
 - call your `sum()` function again, using `1:100`.
 - call the `sum()` function in the `base` package using `1:100`
 
-```{r call_excited_sum, exercise=tutorialize, exercise.setup=excited_sum}
+```{r 07_call_excited_sum, exercise=tutorialize, exercise.setup=06_excited_sum}
 sum(1:100)
 base::sum(1:100)
 ```
@@ -268,7 +275,7 @@ If you remove your excited `sum()` function from the tutorial's environment, R w
 - use `rm()` to remove your excited `sum()` function.
 - call `sum()` with `1:100` one last time to show that the `sum` function behavior is once again very bland.
 
-```{r remove_excited_sum, exercise=tutorialize, exercise.setup=excited_sum}
+```{r 08_remove_excited_sum, exercise=tutorialize, exercise.setup=06_excited_sum}
 rm(sum)
 sum(1:100)
 ```
@@ -287,7 +294,7 @@ In the sandbox below,
 
 - load the `dplyr` package using the `library()` function.  Pay attention to the message you get the first time you load it successfully...
 
-```{r load_dplyr, exercise=tutorialize}
+```{r 09_load_dplyr, exercise=tutorialize}
 library(dplyr)
 ```
 
@@ -325,11 +332,11 @@ Let's plot displacement (the volume of the engine's cylinders) against horsepowe
 
 - using extraction (the `$` operator), pass the `disp` column and the `hp` column from `mtcars` to the plot function.
 
-```{r plot_hp_vs_disp_1, exercise=tutorialize}
+```{r 10_plot_hp_vs_disp_1, exercise=tutorialize}
 plot(mtcars$disp, mtcars$hp)
 ```
 
-Note that the `plot()` function will do different things depending on what type of object you pass to plot.  If you pass a `data.frame` to `plot()`, it will make a grid of graphs that showes every column plotted against every other column in the `data.frame`!
+Note that the `plot()` function will do different things depending on what type of object you pass to plot.  If you pass a `data.frame` to `plot()`, it will make a grid of graphs that shows every column plotted against every other column in the `data.frame`!
 
 ```{r, echo = TRUE}
 plot(mtcars)
@@ -347,4 +354,6 @@ Cool huh?
 
 ### Nice work
 
-You've completed the Lecture 9 assignment.  Please create the submission file by calling `ENSC311::submit_ENSC()`.  Find the number associated with the "Lecture 9" file and then call `ENSC311::submit_ENSC(<FileNumber>)` but replace `<FileNumber>` with the number of the file.  You should then see a "submit_..." file on the "Files" tab of the lower right pane in R Studio.  Please submit the Lecture 9 "submit_..." file to D2L.
+You've completed the Lecture 9 assignment. 
+
+<!-- Please create the submission file by calling `ENSC311::submit_ENSC()`.  Find the number associated with the "Lecture 9" file and then call `ENSC311::submit_ENSC(<FileNumber>)` but replace `<FileNumber>` with the number of the file.  You should then see a "submit_..." file on the "Files" tab of the lower right pane in R Studio.  Please submit the Lecture 9 "submit_..." file to D2L. -->
