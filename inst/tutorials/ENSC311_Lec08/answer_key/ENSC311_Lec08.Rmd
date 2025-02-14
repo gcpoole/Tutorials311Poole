@@ -657,6 +657,7 @@ Your code with be more consistent and therefore less error prone if you use the 
 
 ### Nice work!
 
-Turn in your homework using `ENSC311::submit_ENSC311()`.  When you do so, look carefully at the list of options to turn in.  They will be in alphabetical not chronological order... 
+<!-- Turn in your homework using `ENSC311::submit_ENSC311()`.  When you do so, look carefully at the list of options to turn in.  They will be in alphabetical not chronological order...  -->
 
-Be sure to choose the number corresponding to the homework for Lecture 8! 
+<!-- Be sure to choose the number corresponding to the homework for Lecture 8!  -->
+You are done with this tutorial
